@@ -35,9 +35,13 @@ class Colour(object):
 
 
     def __mul__(self, factor):
-        """Multiplication operator: colour * scalar"""
-        f = float(factor)   # Make sure the other operand is a float (or convertible to one)
-        return Colour(self.r * f, self.g * f, self.b * f)
+        """Multiplication operator: colour * scalar, colour * otherColour"""
+        if (isinstance(factor, float)):# Make sure the other operand is a float (or convertible to one)
+            return Colour(self.r * factor, self.g * factor, self.b * factor)
+        elif (isinstance(factor, Colour)):
+            return self.modulate(factor)
+        else:
+            return NotImplemented()
 
 
     def __div__(self, divisor):
@@ -48,7 +52,10 @@ class Colour(object):
 
     def __rmul__(self, factor):
         """Reverse multiplication operator: scalar * colour"""
-        return Colour(self.r * factor, self.g * factor, self.b * factor)
+        if (isinstance(factor, float)):
+            return Colour(self.r * factor, self.g * factor, self.b * factor)
+        else:
+            return NotImplemented()
 
 
     def __add__(self, other):
@@ -86,7 +93,8 @@ if __name__ == "__main__":
     print "colourD:", str(colourA / 2)
     reflectance = Colour(1, 0.5, 0.2)
     print "reflectance:", str(reflectance)
-    print "colourB * reflectance", colourB.modulate(reflectance)
+    print "colourB * reflectance", colourB * reflectance
+    print "colourB.modulate(reflectance)", colourB.modulate(reflectance)
     colourA += colourB
     print "After adding in colourB, colourA is: ", str(colourA)
     print "In (0..255) ints, colour A is:", colourA.intColour()
