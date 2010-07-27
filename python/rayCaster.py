@@ -61,9 +61,7 @@ class View(object):
         # Compute (x, y) coordinates of pixel on the plane z = 1
         y = (self.height - row - 0.5) * spacing
         x = (col + 0.5) * spacing
-
-        # Oops, some code seems to have gone missing here.
-
+        ray = Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point)
         return ray
 
     
