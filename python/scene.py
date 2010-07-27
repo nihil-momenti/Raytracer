@@ -30,10 +30,14 @@ class Scene(object):
         """Intersect the given ray with all objects in the scene,
         returning the pair (obj, t) of the first object hit or 
         None if there are no hits"""
-
-        # *** FIX ME! ***
-        t = self.objs[0].intersect(ray)
-        return None if t is None else (objs[0], t)
+        t = {}
+        for obj in self.objs :
+            intersect = obj.intersect(ray)
+            if intersect is not None:
+                t.append(intersect, obj)
+        if len(t) == 0 : return None
+        first = min(t)
+        return first
 
 
 
