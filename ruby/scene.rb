@@ -6,9 +6,6 @@
 
 require 'geom3'
 
-from geom3 import Vector3, Point3, unit, dot, cross
-from math import sqrt
-
 # A scene is a list of ray-traceable objects. It provides an intersect
 # method to intersect a ray with the scene, returning the 't'
 # value (distance along the ray) at the first hit, plus
@@ -35,6 +32,6 @@ class Scene
     def intersect(ray)
         # *** FIX ME! ***
         t = @objs[0].intersect(ray)
-        return None if t is None else (objs[0], t)
+        return t & [objs[0], t]
     end
 end

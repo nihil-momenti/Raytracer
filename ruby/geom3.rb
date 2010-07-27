@@ -168,7 +168,7 @@ module Geom3
         
     end
     
-    class Fixnum
+    class ::Fixnum
         # r * v for r an integer is scaling of vector v by r
         alias_method :'old_vector3_times', :'*'
         def *(vector)
@@ -180,7 +180,7 @@ module Geom3
         end
     end
     
-    class Float
+    class ::Float
         # r * v for r a float is scaling of vector v by r
         alias_method :'old_vector3_times', :'*'
         def *(vector)
@@ -233,60 +233,59 @@ module Geom3
             return "Ray3(%s,%s)" % [@start, @dir]
         end
     end
-end
-
-#================================================================
-#
-# Simple unit tests if module is run as main
-#
-#================================================================
-if __FILE__ == $0
-    def assert
-        raise "Assertion Failed!" unless yield
+    
+    #================================================================
+    #
+    # Simple unit tests if module is run as main
+    #
+    #================================================================
+    if __FILE__ == $0
+        def Geom3::assert
+            raise "Assertion Failed!" unless yield
+        end
+        # Simple tests of all basic vector operations
+        
+        v1 = Vector3.new(1,2,3)
+        v2 = Vector3.new(3,2,1)
+    #    assert {Vector3.new((1,2,3)) == v1}
+        assert {Vector3.new([1,2,3]) == v1}
+        assert {Vector3.new(Point3.new(1,2,3)) == v1}
+        assert {v1 + v2 == Vector3.new(4,4,4)}
+        assert {v1 - v2 == Vector3.new(-2,0,2)}
+        assert {v1 * 3 == Vector3.new(3,6,9)}
+        assert {3 * v1 == Vector3.new(3,6,9)}
+        assert {v1/2.0 == Vector3.new(0.5,1,1.5)}
+        assert {-v1 == Vector3.new(-1,-2,-3)}
+        assert {v1[0] == 1 and v1[1] == 2 and v1[2] == 3}
+    #    assert {list(v1) == [1,2,3]}
+        assert {v1.to_s == "(1.000,2.000,3.000)"}
+    #    assert {eval(repr(v1)) == v1}
+        assert {v1.dot(v2) == 10}
+        assert {v1.cross(v2) == Vector3.new(-4,8,-4)}
+        assert {Vector3.new(2,3,4).unit.length == 1.0}
+        assert {Vector3.new(2,3,4).norm.length == 1.0}
+        
+        # Tests on points
+        
+        p1 = Point3.new(2,4,6)
+        p2 = Point3.new(4,7,3)
+    #    assert {Point3.new((2,4,6)) == p1}
+        assert {Point3.new([2,4,6]) == p1}
+        assert {Point3.new(Vector3.new(2,4,6)) == p1}
+        assert {(0..2).each {|i| p1[i] == [2,4,6][i]}}
+        assert {p1-p2 == Vector3.new(-2,-3,3)}
+        assert {p1+v1 == Point3.new(3,6,9)}
+        assert {p1.to_s == "(2.000,4.000,6.000)"}
+    #    assert {eval(repr(p1)) == p1}
+    #    try:
+    #        p1 + p2
+    #        assert {False}
+    #    except TypeError: pass
+    #    try:
+    #        3 * p1
+    #        assert {False}
+    #    except TypeError: pass
+    
+        p "Passed all tests"
     end
-    # Simple tests of all basic vector operations
-    
-    v1 = Vector3.new(1,2,3)
-    v2 = Vector3.new(3,2,1)
-#    assert {Vector3.new((1,2,3)) == v1}
-    assert {Vector3.new([1,2,3]) == v1}
-    assert {Vector3.new(Point3.new(1,2,3)) == v1}
-    assert {v1 + v2 == Vector3.new(4,4,4)}
-    assert {v1 - v2 == Vector3.new(-2,0,2)}
-    assert {v1 * 3 == Vector3.new(3,6,9)}
-    assert {3 * v1 == Vector3.new(3,6,9)}
-    assert {v1/2.0 == Vector3.new(0.5,1,1.5)}
-    assert {-v1 == Vector3.new(-1,-2,-3)}
-    assert {v1[0] == 1 and v1[1] == 2 and v1[2] == 3}
-#    assert {list(v1) == [1,2,3]}
-    assert {v1.to_s == "(1.000,2.000,3.000)"}
-#    assert {eval(repr(v1)) == v1}
-    assert {v1.dot(v2) == 10}
-    assert {v1.dot(v2) == dot(v1,v2)}
-    assert {v1.cross(v2) == Vector3.new(-4,8,-4)}
-    assert {length(unit(Vector3.new(2,3,4))) == 1.0}
-    assert {length(Vector3.new(2,3,4).norm()) == 1.0}
-    
-    # Tests on points
-    
-    p1 = Point3.new(2,4,6)
-    p2 = Point3.new(4,7,3)
-#    assert {Point3.new((2,4,6)) == p1}
-    assert {Point3.new([2,4,6]) == p1}
-    assert {Point3.new(Vector3.new(2,4,6)) == p1}
-    assert {(0..2).each {|i| p1[i] == [2,4,6][i]}}
-    assert {p1-p2 == Vector3.new(-2,-3,3)}
-    assert {p1+v1 == Point3.new(3,6,9)}
-    assert {p1.to_s == "(2.000,4.000,6.000)"}
-#    assert {eval(repr(p1)) == p1}
-#    try:
-#        p1 + p2
-#        assert {False}
-#    except TypeError: pass
-#    try:
-#        3 * p1
-#        assert {False}
-#    except TypeError: pass
-
-    p "Passed all tests"
 end

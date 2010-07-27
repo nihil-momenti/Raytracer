@@ -1,7 +1,11 @@
+require 'geom3'
+
 module Shapes
-    
+   include Geom3 
+
     # An abstract base class for all shapes.
     class Shape
+        attr_accessor :material
         # Set the material for the shape.
         def initialize(material)
             @material = material
@@ -75,7 +79,7 @@ module Shapes
         end
     
     
-        @The surface normal at the given point
+        # The surface normal at the given point
         def normal(p)
             return None   # FIX ME
         end
@@ -87,7 +91,7 @@ module Shapes
             return None # FIX ME !!
         end
     
-        def inspect(self)
+        def inspect()
             return "Plane(%s, %s)" % [@p, @n]
         end
     end

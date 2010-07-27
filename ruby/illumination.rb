@@ -28,7 +28,7 @@ class Material
     # Initialise the diffuse and specular reflectances plus the specular
     # highlight exponent.  specular_colour and shininess are both None for a
     # purely diffuse surface
-    def initalize(diffuse_colour, specular_colour = nil, shininess = nil)
+    def initialize(diffuse_colour, specular_colour = nil, shininess = nil)
         @diffuse_colour = diffuse_colour
         @specular_colour = specular_colour
         @shininess = shininess
