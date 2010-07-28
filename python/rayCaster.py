@@ -10,7 +10,7 @@ from datetime import datetime
 
 # Define various scene constants
 
-WIN_SIZE = 200                      # Screen window size (square)
+WIN_SIZE = 1000                      # Screen window size (square)
 LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
 LIGHT_INTENS = 0.8                  # Intensity of the single white light source
 AMBIENT = 0.1                       # Ambient light level (assumed white light)
@@ -118,5 +118,5 @@ view = View(EYEPOINT, LOOKAT, FOV, WIN_SIZE, WIN_SIZE)
 camera = Camera(view, scene, lighting)
 
 img = camera.take_photo()
-img.show()      # Display image in default image-viewer application
+img.save('image.bmp')      # Display image in default image-viewer application
 print "Rendering time:", datetime.now() - start

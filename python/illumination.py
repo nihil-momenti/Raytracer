@@ -45,7 +45,7 @@ class Material(object):
         else :
             diffuse_reflection = self.diffuse_colour * lighting.light_intens * max(0, lighting.light_dir.dot(normal))
         
-        h = (lighting.light_dir + view_vector).unit()
+        h = (lighting.light_dir - view_vector).unit()
         hdn = max(0, h.dot(normal))
         specular_reflection = self.specular_colour * (hdn ** self.shininess)
 
