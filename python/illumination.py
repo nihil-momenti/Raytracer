@@ -37,10 +37,14 @@ class Material(object):
         '''The RGB colour of this material with the given surface
         normal under the given lighting when viewed from an
         eyepoint in the view_vector direction.'''
+        
         ambient_reflection = self.diffuse_colour * lighting.ambient
+        
         if shadowed :
-            diffuse_reflection = 0
+            diffuse_reflection = Colour(0,0,0)
         else :
             diffuse_reflection = self.diffuse_colour * lighting.light_intens * max(0, lighting.light_dir.dot(normal))
+        
+        specular_reflection = self.specular_colour * lighting.light_intens * (max(0, (lighting.light_dir + view_vector).unit().dot(normal)) ** self.shininess)
 
-        return self.diffuse_colour  # **** IMPLEMENT ME PROPERLY PLEASE ****
+        return ambient_reflection + diffuse_reflection + specular_reflection

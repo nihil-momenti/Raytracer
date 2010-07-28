@@ -88,7 +88,7 @@ class Camera(object):
             colour = BACKGROUND
         else:
             (obj, alpha) = hitPoint
-            colour = obj.material.diffuse_colour
+            colour = obj.material.lit_colour(obj.normal(ray.pos(alpha)), self.lighting, ray.dir)
 
         return colour
 

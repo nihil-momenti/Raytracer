@@ -34,10 +34,10 @@ class Scene(object):
         for obj in self.objs :
             intersect = obj.intersect(ray)
             if intersect is not None:
-                t.append(intersect, obj)
+                t[intersect] = obj
         if len(t) == 0 : return None
         first = min(t)
-        return first
+        return (t[first], first)
 
 
 

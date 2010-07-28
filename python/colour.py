@@ -38,6 +38,8 @@ class Colour(object):
         """Multiplication operator: colour * scalar, colour * otherColour"""
         if (isinstance(factor, float)):# Make sure the other operand is a float (or convertible to one)
             return Colour(self.r * factor, self.g * factor, self.b * factor)
+        elif (isinstance(factor, int)):# Make sure the other operand is a float (or convertible to one)
+            return Colour(self.r * factor, self.g * factor, self.b * factor)
         elif (isinstance(factor, Colour)):
             return self.modulate(factor)
         else:
