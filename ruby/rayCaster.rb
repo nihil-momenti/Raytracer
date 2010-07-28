@@ -9,7 +9,7 @@ module RayCaster
     include Geom3, Shapes
     # Define various scene constants
     
-    WIN_SIZE = 200                      # Screen window size (square)
+    WIN_SIZE = 1000                      # Screen window size (square)
     LIGHT_DIR = Vector3.new(2,5,3).unit # The direction vector towards the light source
     LIGHT_INTENS = 0.8                  # Intensity of the single white light source
     AMBIENT = 0.1                       # Ambient light level (assumed white light)
@@ -57,8 +57,7 @@ module RayCaster
             y = (@height - row - 0.5) * spacing
             x = (col + 0.5) * spacing
             
-            ray = nil
-            # Oops, some code seems to have gone missing here.
+            ray = Geom3::Ray3.new(@eye_point, Geom3::Point3.new(x, y, 1)- @eye_point)
     
             return ray
        end
@@ -78,12 +77,11 @@ module RayCaster
         # with the current lighting.
         def colour_along_ray(ray)
             hitPoint = @scene.intersect(ray)
-    
             if hitPoint == nil
                 colour = BACKGROUND
             else
                 obj, alpha = hitPoint
-                colour = obj.material.diffuse_colour
+                colour = obj.material.lit_colour(obj.normal(ray.pos(alpha)), @lighting, ray.dir)
             end
     
             return colour
@@ -91,16 +89,22 @@ module RayCaster
     
     
         def take_photo()
-            #img = Image.new("RGB", (@view.width, @view.height))
-            img = []
-            (0..@view.height).each do |row|
-              img[row] = []
-              (0..@view.width).each do |col|
+            #pix = Image.new("RGB", (@view.width, @view.height))
+            pix = []
+            (0...@view.height).each do |row|
+              pix[row] = []
+              (0...@view.width).each do |col|
                 ray = @view.eye_ray(col, row)
                 colour = self.colour_along_ray(ray)
-                img[row][col] = colour.intColour()
+                pix[row][col] = colour.toPixel()
               end
             end
+            
+            width = @view.width
+            height = @view.height
+
+            img = Magick::Image.new(width, height)
+            img.store_pixels(0, 0, width, height, pix.flatten)
                     
             return img
         end
@@ -119,6 +123,6 @@ module RayCaster
     camera = Camera.new(view, scene, lighting)
     
     img = camera.take_photo()
-#    img.show()      # Display image in default image-viewer application
+    img.write('image.bmp')      # Display image in default image-viewer application
     print "Rendering time:", Time.now - start
 end
