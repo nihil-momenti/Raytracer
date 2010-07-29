@@ -4,7 +4,8 @@ from geom3 import Point3, Vector3, Ray3, unit
 from colour import Colour
 from PIL import Image
 from illumination import Lighting, Material
-from scene import Scene, Sphere, Plane
+from scene import Scene
+from shapes import Sphere, Plane
 from datetime import datetime
 
 
@@ -12,7 +13,7 @@ from datetime import datetime
 
 MULTI = 3 # Level of linear AA
 
-WIN_SIZE = 1000                      # Screen window size (square)
+WIN_SIZE = 100                      # Screen window size (square)
 LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
 LIGHT_INTENS = 0.8                  # Intensity of the single white light source
 AMBIENT = 0.1                       # Ambient light level (assumed white light)
@@ -65,6 +66,13 @@ class View(object):
         x = (col) * spacing / MULTI
         ray = Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point)
         return ray
+    
+    def eye_rays(self):
+        rays = []
+        for row in range(self.width * MULTI):
+            for col in range(self.height * MULTI):
+                rays.append(self.eye_ray(col, row))
+        return rays
 
     
 
@@ -86,7 +94,7 @@ class Camera(object):
         
         hitPoint = self.scene.intersect(ray)
 
-        if hitPoint is None:
+        if hitPoint[1] == float('Inf'):
             colour = BACKGROUND
         else:
             (obj, alpha) = hitPoint
@@ -94,24 +102,22 @@ class Camera(object):
 
         return colour
 
+    def colours_along_rays(self, rays):
+        return map(self.colour_along_ray, rays)
+
 
     def take_photo(self):
         img = Image.new("RGB", (self.view.width, self.view.height))
         
-        multiSamples = []
-        for row in range(self.view.height * 4):
-            multiSamples.append([])
-            for col in range(self.view.width * 4):
-                ray = self.view.eye_ray(col, row)
-                colour = self.colour_along_ray(ray)
-                multiSamples[row].append(colour)
+        rays = self.view.eye_rays()
+        multiSamples = self.colours_along_rays(rays)
 
         for row in range(self.view.height):
             for col in range(self.view.width):
                 pixel = Colour(0,0,0)
-                for irow in range(4):
-                    for icol in range(4):
-                        pixel += multiSamples[MULTI*row + irow][MULTI*col + icol]
+                for irow in range(MULTI):
+                    for icol in range(MULTI):
+                        pixel += multiSamples[self.view.width * MULTI * (MULTI*row + irow) + MULTI*col + icol]
                 pixel = pixel / MULTI ** 2
                 img.putpixel((col, row), pixel.intColour())
                 
