@@ -10,6 +10,8 @@ from datetime import datetime
 
 # Define various scene constants
 
+MULTI = 3 # Level of linear AA
+
 WIN_SIZE = 1000                      # Screen window size (square)
 LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
 LIGHT_INTENS = 0.8                  # Intensity of the single white light source
@@ -59,8 +61,8 @@ class View(object):
         spacing = 1.0 / self.width  # Pixel spacing
 
         # Compute (x, y) coordinates of pixel on the plane z = 1
-        y = (self.height - row - 0.5) * spacing
-        x = (col + 0.5) * spacing
+        y = (self.height * MULTI - row) * spacing / MULTI
+        x = (col) * spacing / MULTI
         ray = Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point)
         return ray
 
@@ -96,11 +98,22 @@ class Camera(object):
     def take_photo(self):
         img = Image.new("RGB", (self.view.width, self.view.height))
         
-        for row in range(self.view.height):
-            for col in range(self.view.width):
+        multiSamples = []
+        for row in range(self.view.height * 4):
+            multiSamples.append([])
+            for col in range(self.view.width * 4):
                 ray = self.view.eye_ray(col, row)
                 colour = self.colour_along_ray(ray)
-                img.putpixel((col, row), colour.intColour())
+                multiSamples[row].append(colour)
+
+        for row in range(self.view.height):
+            for col in range(self.view.width):
+                pixel = Colour(0,0,0)
+                for irow in range(4):
+                    for icol in range(4):
+                        pixel += multiSamples[MULTI*row + irow][MULTI*col + icol]
+                pixel = pixel / MULTI ** 2
+                img.putpixel((col, row), pixel.intColour())
                 
         return img
 
