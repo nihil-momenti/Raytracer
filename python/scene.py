@@ -40,4 +40,15 @@ class Scene(object):
         return (t[first], first)
 
     def intersectMultiple(self, rays):
-        return map(self.intersect, rays)
+        intersections = {}
+        for obj in self.objs:
+            intersections[obj] = obj.intersectMultiple(rays)
+
+        minimums = []
+        for i in range(len(rays)):
+            minimums.append([None, float('Inf')])
+            for obj in intersections:
+                if (intersections[obj][i] < minimums[i][1]):
+                    minimums[i] = [obj, intersections[obj][i]]
+
+        return minimums

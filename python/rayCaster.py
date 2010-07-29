@@ -11,7 +11,7 @@ from datetime import datetime
 
 # Define various scene constants
 
-MULTI = 3 # Level of linear AA
+MULTI = 1 # Level of linear AA
 
 WIN_SIZE = 100                      # Screen window size (square)
 LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
@@ -47,31 +47,15 @@ class View(object):
         self.fov = fov
         self.width = width
         self.height = height
-
-        
-    def eye_ray(self, col, row):
-        '''The ray from the eye through pixel (col,row) in this view.'''
-
-        # This version is a horrible hack that works only for the simple
-        # geometry in which the image on the viewplane is the unit square
-        # from (0,0,1) to (1,1,1) and the eye is located at some point
-        # (0.5, 0.5, eyeZ).
-        # And in fact, it's not just a horrible hack. It's an incomplete
-        # horrible hack.
-        
-        spacing = 1.0 / self.width  # Pixel spacing
-
-        # Compute (x, y) coordinates of pixel on the plane z = 1
-        y = (self.height * MULTI - row) * spacing / MULTI
-        x = (col) * spacing / MULTI
-        ray = Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point)
-        return ray
     
     def eye_rays(self):
         rays = []
+        spacing = 1.0 / self.width
         for row in range(self.width * MULTI):
             for col in range(self.height * MULTI):
-                rays.append(self.eye_ray(col, row))
+                y = (self.height * MULTI - row) * spacing / MULTI
+                x = (col) * spacing / MULTI
+                rays.append(Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point))
         return rays
 
     
@@ -86,25 +70,17 @@ class Camera(object):
         self.view = view
         self.scene = scene
         self.lighting = lighting
-        
-
-    def colour_along_ray(self, ray):
-        """Return the colour seen looking along the given ray into the
-           current scene with the current lighting."""
-        
-        hitPoint = self.scene.intersect(ray)
-
-        if hitPoint[1] == float('Inf'):
-            colour = BACKGROUND
-        else:
-            (obj, alpha) = hitPoint
-            colour = obj.material.lit_colour(obj.normal(ray.pos(alpha)), self.lighting, ray.dir)
-
-        return colour
 
     def colours_along_rays(self, rays):
-        return map(self.colour_along_ray, rays)
-
+        colours = []
+        hitpoints = self.scene.intersectMultiple(rays)
+        for index in range(len(hitpoints)):
+            if hitpoints[index][1] == float('Inf'):
+                colours.append(BACKGROUND)
+            else:
+                (obj, alpha) = hitpoints[index]
+                colours.append(obj.material.lit_colour(obj.normal(rays[index].pos(alpha)), self.lighting, rays[index].dir))
+        return colours
 
     def take_photo(self):
         img = Image.new("RGB", (self.view.width, self.view.height))
