@@ -1,4 +1,4 @@
-from geom3 import Point3, Vector3, Ray3, cross, dot, unit, length
+from geom3 import Point3, Vector3, Ray3, cross, dot, unit, length, GeomException
 from math import sqrt, tan, atan, degrees
 from geom3 import Point3, Vector3, Ray3, unit
 from colour import Colour
@@ -11,9 +11,9 @@ from datetime import datetime
 
 # Define various scene constants
 
-MULTI = 1 # Level of linear AA
+MULTI = 2 # Level of linear AA
 
-WIN_SIZE = 100                      # Screen window size (square)
+WIN_SIZE = 400                      # Screen window size (square)
 LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
 LIGHT_INTENS = 0.8                  # Intensity of the single white light source
 AMBIENT = 0.1                       # Ambient light level (assumed white light)
@@ -21,7 +21,7 @@ BACKGROUND = Colour(0.6,0.6,0.6)    # Colour of the background
 
 SHINY_RED = Material(Colour(0.7, 0.3, 0.2), Colour(0.4,0.4,0.4), 100)
 SHINY_BLUE = Material(Colour(0.2, 0.3, 0.7), Colour(0.8,0.8,0.8), 200)
-MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), None, None)
+MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), Colour(1,1,1), 100)
 
 # Warning the next three values can't be meaningfully altered until
 # the View.eye_ray method has been rewritten.
@@ -79,7 +79,12 @@ class Camera(object):
                 colours.append(BACKGROUND)
             else:
                 (obj, alpha) = hitpoints[index]
-                colours.append(obj.material.lit_colour(obj.normal(rays[index].pos(alpha)), self.lighting, rays[index].dir))
+                try:colours.append(obj.material.lit_colour(obj.normal(rays[index].pos(alpha)), self.lighting, -rays[index].dir))
+                except GeomException:
+                  print obj
+                  print alpha
+                  print rays[index]
+                  
         return colours
 
     def take_photo(self):
@@ -107,7 +112,7 @@ lighting = Lighting(LIGHT_INTENS, LIGHT_DIR, AMBIENT)
 
 scene = Scene([Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE),
                Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED),
-               Plane(Point3(0,0,0), Vector3(0,1,0), MATT_GREEN)])
+               Plane(Point3(0,0,0), Vector3(1,2,1), MATT_GREEN)])
 
 view = View(EYEPOINT, LOOKAT, FOV, WIN_SIZE, WIN_SIZE)
 camera = Camera(view, scene, lighting)

@@ -77,14 +77,20 @@ class Plane(object):
 
     def normal(self, p):
         """The surface normal at the given point"""
-        return None   # FIX ME
+        return self.n
 
 
     def intersect(self, ray):
         """The ray t value of the first intersection point of the
         ray with self, or None if no intersection occurs"""
-        
-        return float('Inf') # FIX ME !!
+        try:
+            t = (self.n.dot(ray.start - self.p)) / abs(ray.dir.dot(self.n))
+        except ZeroDivisionError:
+            t = float('Inf')
+        if t > 0:
+            return t
+        else:
+            return float('Inf')
 
     def intersectMultiple(self, rays):
         return map(self.intersect, rays)

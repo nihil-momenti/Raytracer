@@ -2,6 +2,7 @@
    the illumination is defined by an associated lighting class, which has
    just a directional white light source and a white ambient component'''
 
+from colour import Colour
 from geom3 import dot, unit
 
 
@@ -45,8 +46,11 @@ class Material(object):
         else :
             diffuse_reflection = self.diffuse_colour * lighting.light_intens * max(0, lighting.light_dir.dot(normal))
         
-        h = (lighting.light_dir - view_vector).unit()
-        hdn = max(0, h.dot(normal))
-        specular_reflection = self.specular_colour * (hdn ** self.shininess)
+        if self.shininess is None:
+            specular_reflection = Colour(0,0,0)
+        else:
+            h = (lighting.light_dir + view_vector).unit()
+            hdn = max(0, h.dot(normal))
+            specular_reflection = self.specular_colour * (hdn ** self.shininess)
 
         return ambient_reflection + diffuse_reflection + specular_reflection
