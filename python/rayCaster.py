@@ -11,10 +11,10 @@ from datetime import datetime
 
 # Define various scene constants
 
-MULTI = 2 # Level of linear AA
+MULTI = 1 # Level of linear AA
 
-WIN_SIZE = 400                      # Screen window size (square)
-LIGHT_DIR = unit(Vector3(2,5,3))    # The direction vector towards the light source
+WIN_SIZE = 100                      # Screen window size (square)
+LIGHT_DIR = unit(Vector3(0.5,0.5,2))    # The direction vector towards the light source
 LIGHT_INTENS = 0.8                  # Intensity of the single white light source
 AMBIENT = 0.1                       # Ambient light level (assumed white light)
 BACKGROUND = Colour(0.6,0.6,0.6)    # Colour of the background
@@ -48,13 +48,13 @@ class View(object):
         self.width = width
         self.height = height
     
-    def eye_rays(self):
+    def eye_rays(self, row, col):
         rays = []
         spacing = 1.0 / self.width
-        for row in range(self.width * MULTI):
-            for col in range(self.height * MULTI):
-                y = (self.height * MULTI - row) * spacing / MULTI
-                x = (col) * spacing / MULTI
+        for irow in range(MULTI):
+            for icol in range(MULTI):
+                y = (self.height * MULTI - (row * MULTI + irow)) * spacing / MULTI
+                x = (col * MULTI + icol) * spacing / MULTI
                 rays.append(Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point))
         return rays
 
@@ -86,20 +86,31 @@ class Camera(object):
                   print rays[index]
                   
         return colours
+    
+    
+    def colour_of_pixel(self, row, col):
+        colour = Colour(0,0,0)
+        for ray in self.view.eye_rays(row, col):
+            hitpoint = self.scene.intersect(ray)
+            if hitpoint[1] == float('Inf'):
+                colour += BACKGROUND
+            else:
+                (obj, alpha) = hitpoint
+                try:colour += obj.material.lit_colour(obj.normal(ray.pos(alpha)), self.lighting, -ray.dir)
+                except GeomException:
+                  print obj
+                  print alpha
+                  print ray
+                  
+        colour = colour / MULTI ** 2
+        return colour
 
     def take_photo(self):
         img = Image.new("RGB", (self.view.width, self.view.height))
         
-        rays = self.view.eye_rays()
-        multiSamples = self.colours_along_rays(rays)
-
         for row in range(self.view.height):
             for col in range(self.view.width):
-                pixel = Colour(0,0,0)
-                for irow in range(MULTI):
-                    for icol in range(MULTI):
-                        pixel += multiSamples[self.view.width * MULTI * (MULTI*row + irow) + MULTI*col + icol]
-                pixel = pixel / MULTI ** 2
+                pixel = self.colour_of_pixel(row, col)
                 img.putpixel((col, row), pixel.intColour())
                 
         return img
@@ -112,7 +123,7 @@ lighting = Lighting(LIGHT_INTENS, LIGHT_DIR, AMBIENT)
 
 scene = Scene([Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE),
                Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED),
-               Plane(Point3(0,0,0), Vector3(1,2,1), MATT_GREEN)])
+               Plane(Point3(0.5,0.5,0), Vector3(0,0,1), MATT_GREEN)])
 
 view = View(EYEPOINT, LOOKAT, FOV, WIN_SIZE, WIN_SIZE)
 camera = Camera(view, scene, lighting)
