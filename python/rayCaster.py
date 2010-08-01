@@ -3,10 +3,12 @@ from math import sqrt, tan, atan, degrees
 from geom3 import Point3, Vector3, Ray3, unit
 from colour import Colour
 from PIL import Image
-from illumination import Lighting, Material
+from material import Material
+from lighting import *
 from scene import Scene
 from shapes import Sphere, Plane
 from datetime import datetime
+from view import View
 
 
 # Define various scene constants
@@ -26,39 +28,11 @@ MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), Colour(1,1,1), 100)
 # Warning the next three values can't be meaningfully altered until
 # the View.eye_ray method has been rewritten.
 
-EYEPOINT = Point3(0.5, 0.5, 2)  # Where the eye is
-LOOKAT = Point3(0.5, 0.5, 0)  # The look at point
+EYEPOINT = Point3(0.5, 0.5, 4)  # Where the eye is
+VIEWDIRECTION = Vector3(0, 0, -1)  # The look at point
+VIEWUP = Vector3(0,1,0)
 FOV = 45            # Field of view (degrees).
 
-
-class View(object):
-  '''A View specifies a camera's position and orientation in space,
-     plus its field_of_view (fov) in degrees. It also specifies the
-     required image size (width x height).'''
-
-  
-  def __init__(self, eye_point, look_at, fov, width, height):
-    '''Constructor sets the eye-point, look-at-point and field of view,
-       plus the width and height (in pixels) of the image that will
-       be computed using this view.'''
-    
-    self.eye_point = eye_point
-    self.look_at = look_at
-    self.fov = fov
-    self.width = width
-    self.height = height
-  
-  def eye_rays(self, row, col):
-    rays = []
-    spacing = 1.0 / self.width
-    for irow in range(MULTI):
-      for icol in range(MULTI):
-        y = (self.height * MULTI - (row * MULTI + irow)) * spacing / MULTI
-        x = (col * MULTI + icol) * spacing / MULTI
-        rays.append(Ray3(self.eye_point, Point3(x, y, 1) - self.eye_point))
-    return rays
-
-  
 
 # ======= A Ray Tracing/Ray Casting Camera class ========= 
 
@@ -90,7 +64,8 @@ class Camera(object):
   
   def colour_of_pixel(self, row, col):
     colour = Colour(0,0,0)
-    for ray in self.view.eye_rays(row, col):
+    for ray in self.view.eye_rays(row, col, MULTI):
+      print ray
       hitpoint = self.scene.intersect(ray)
       if hitpoint[1] == float('Inf'):
         colour += BACKGROUND
@@ -119,14 +94,15 @@ class Camera(object):
 # ====== Main body. Compute and display image ========
 
 start = datetime.now()
-lighting = Lighting(LIGHT_INTENS, LIGHT_DIR, AMBIENT)
+light = DirectionalLight(LIGHT_INTENS, LIGHT_DIR)
+ambientLight = AmbientLight(AMBIENT)
 
 scene = Scene([Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE),
          Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED),
          Plane(Point3(0.5,0.5,0), Vector3(0,0,1), MATT_GREEN)])
 
-view = View(EYEPOINT, LOOKAT, FOV, WIN_SIZE, WIN_SIZE)
-camera = Camera(view, scene, lighting)
+view = View(EYEPOINT, VIEWDIRECTION, VIEWUP, FOV, WIN_SIZE, WIN_SIZE)
+camera = Camera(view, scene, [light, ambientLight])
 
 img = camera.take_photo()
 img.save('image.bmp')    # Display image in default image-viewer application
