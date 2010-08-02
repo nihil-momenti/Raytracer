@@ -1,9 +1,4 @@
-require 'geom3'
-require 'colour'
-require 'illumination'
-require 'scene'
-require 'shapes'
-#from PIL import Image
+require 'geom3', 'colour', 'illumination', 'scene', 'shapes'
 
 module RayCaster
     include Geom3, Shapes

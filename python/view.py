@@ -1,6 +1,6 @@
 from geom3 import Ray3
 from math import tan, pi
-import random
+from random import random
 
 class View(object):
   def __init__(self, viewPoint, viewDirection, viewUp, hFov, height, width, multi):
@@ -18,6 +18,8 @@ class View(object):
     rays = []
     for irow in range(self.multi):
       for icol in range(self.multi):
-        point = self.topLeft + self.yVector * (row + (irow + 0.5) / self.multi) + self.xVector * (col + (icol + 0.5) / self.multi)
+        dy = self.yVector * (row + (irow + random()) / self.multi)
+        dx = self.xVector * (col + (icol + random()) / self.multi)
+        point = self.topLeft + dy + dx
         rays.append(Ray3(self.point, point - self.point))
     return rays

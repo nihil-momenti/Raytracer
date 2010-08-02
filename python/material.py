@@ -9,6 +9,7 @@ class Material(object):
     self.diffuse_colour = diffuse_colour
     self.specular_colour = specular_colour
     self.shininess = shininess
+    self.casts_shadow = True
 
 
   def lit_colour(self, scene, normal, lighting, view_vector, point):
@@ -20,3 +21,13 @@ class Material(object):
         reflection += self.specular_colour * (light.specularLighting(normal, view_vector, point, scene) ** self.shininess)
 
     return reflection
+
+
+class LightBulbMaterial(Material):
+  def __init__(self, light):
+    super(LightBulbMaterial, self).__init__(None)
+    self.casts_shadow = False
+    self.light = light
+    
+  def lit_colour(self, scene, normal, lighting, view_vector, point):
+    return self.light.value

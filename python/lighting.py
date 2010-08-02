@@ -1,6 +1,9 @@
 from colour import Colour
 from geom3 import Ray3
 
+def distanceLoss(distance):
+  return max(0, 5 - distance) / 5
+
 class AmbientLight(object):
   def __init__(self, value):
     self.value = value
@@ -17,13 +20,19 @@ class DirectionalLight(object):
     self.direction = direction.unit()
 
   def specularLighting(self, normal, view_vector, point, scene):
-    if (scene.intersect(Ray3(point + self.direction * 0.0001, self.direction))[1] != float('Inf')):
+    direction = self.direction
+    distance = float('Inf')
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
       return Colour(0,0,0)
     h = (self.direction + view_vector.unit()).unit()
     return self.value * max(0, h.dot(normal))
 
   def diffuseLighting(self, normal, point, scene):
-    if (scene.intersect(Ray3(point + self.direction * 0.0001, self.direction))[1] != float('Inf')):
+    direction = self.direction
+    distance = float('Inf')
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
       return Colour(0,0,0)
     return self.value * max(0, self.direction.dot(normal))
 
@@ -34,13 +43,23 @@ class PointLight(object):
     self.point = point
 
   def specularLighting(self, normal, view_vector, point, scene):
-    direction = (self.point - point).unit()
+    vector = self.point - point
+    direction = vector.unit()
+    distance = vector.length()
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+      return Colour(0,0,0)
     h = (direction + view_vector.unit()).unit()
-    return self.value * max(0, h.dot(normal))
+    return self.value * distanceLoss(distance) * max(0, h.dot(normal))
 
   def diffuseLighting(self, normal, point, scene):
-    direction = (self.point - point).unit()
-    return self.value * max(0, direction.dot(normal))
+    vector = self.point - point
+    direction = vector.unit()
+    distance = vector.length()
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+      return Colour(0,0,0)
+    return self.value * distanceLoss(distance) *  max(0, direction.dot(normal))
 
 
 class FocusedLight(object):
@@ -51,18 +70,23 @@ class FocusedLight(object):
     self.spread = spread
 
   def specularLighting(self, normal, view_vector, point, scene):
-    if (scene.intersect(Ray3(point + self.direction * 0.0001, self.direction))[1] != float('Inf')):
+    vector = self.point - point
+    direction = vector.unit()
+    distance = vector.length()
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
       return Colour(0,0,0)
-    direction = (self.point - point).unit()
     multiplier = max(0, direction.dot(self.direction)) ** self.spread
     h = (direction + view_vector.unit()).unit()
-    return self.value * multiplier * max(0, h.dot(normal))
+    return self.value * multiplier * distanceLoss(distance) *  max(0, h.dot(normal))
 
   def diffuseLighting(self, normal, point, scene):
-    if (scene.intersect(Ray3(point + self.direction * 0.0001, self.direction))[1] != float('Inf')):
+    vector = self.point - point
+    direction = vector.unit()
+    distance = vector.length()
+    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
       return Colour(0,0,0)
-    fullDirection = self.point - point
-    direction = fullDirection.unit()
     multiplier = max(0, direction.dot(self.direction)) ** self.spread
-    return self.value * multiplier * max(0,5 - fullDirection.length())/5 * max(0, direction.dot(normal))
+    return self.value * multiplier * distanceLoss(distance) *  max(0, direction.dot(normal))
 

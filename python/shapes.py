@@ -2,8 +2,6 @@ from geom3 import Vector3, Point3
 from math import sqrt
 
 class Sphere(object):
-  '''A ray-traceable sphere'''
-  
   def __init__(self, centre, radius, material):
     """Create a sphere with a given centre point, radius
     and surface material"""
@@ -13,13 +11,10 @@ class Sphere(object):
 
 
   def normal(self, p):
-    """The surface normal at the given point on the sphere"""
     return (p - self.centre).unit()
 
 
   def intersect(self, ray):
-    """The rays t value of the first intersection point of the
-    rays with self, or inf if no intersection occurs.  For each ray."""
     t = float('Inf')
 
     q = self.centre - ray.start
@@ -44,24 +39,17 @@ class Sphere(object):
 
 
 class Plane(object):
-  '''A ray-traceable plane'''
-  
   def __init__(self, point, normal, material):
-    """Create a plane through a given point with given normal
-    and surface material"""
-    self.n = normal.unit()  # Normalise in case caller doesn't
+    self.n = normal.unit()
     self.p = point
     self.material = material
 
 
   def normal(self, p):
-    """The surface normal at the given point"""
     return self.n
 
 
   def intersect(self, ray):
-    """The ray t value of the first intersection point of the
-    ray with self, or None if no intersection occurs"""
     try:
       t = (self.n.dot(self.p - ray.start)) / ray.dir.dot(self.n)
     except ZeroDivisionError:
