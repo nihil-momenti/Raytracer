@@ -12,9 +12,6 @@ class View(object):
     self.yVector = -spacing * viewUp.unit()
     self.xVector = spacing * viewUp.cross(viewDirection).unit()
     self.topLeft = (viewPoint + viewDirection) - (self.yVector * height / 2 + self.xVector * width / 2)
-    print self.yVector
-    print self.xVector
-    print self.topLeft
 
 
   def eye_rays(self, row, col):

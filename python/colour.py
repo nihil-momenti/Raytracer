@@ -72,6 +72,9 @@ class Colour(object):
     self.b += other.b
     return self
 
+  def __pow__(self, power):
+    return Colour(self.r ** power, self.g ** power, self.b ** power)
+
 
   def intColour(self):
     """Return an RGB triple of self's RGB components, each multiplied

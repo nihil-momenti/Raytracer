@@ -113,6 +113,10 @@ class Vector3(object):
     return self.__mul__(scale)
 
 
+  def __pow__(self, power):
+    return Vector3(self.dx ** power, self.dy ** power, self.dz ** pow)
+
+
   def __div__(self, scale):
     """Division of a vector by a float r is scaling by (1/r)"""
     return self.__mul__(1.0/scale)
@@ -163,6 +167,9 @@ class Vector3(object):
   def unit(self):
     """Same as 'norm'. Provided for compatibility with Visual"""
     return norm(self)
+
+  def length(self):
+    return length(self)
   
   
   def __str__(self):

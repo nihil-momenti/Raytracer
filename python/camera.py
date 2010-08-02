@@ -19,11 +19,9 @@ class Camera(object):
         colour += BACKGROUND
       else:
         (obj, alpha) = hitpoint
-        try:colour += obj.material.lit_colour(obj.normal(ray.pos(alpha)), self.lighting, -ray.dir)
-        except GeomException:
-          print obj
-          print alpha
-          print ray
+        pos = ray.pos(alpha)
+        normal = obj.normal(pos)
+        colour += obj.material.lit_colour(normal, self.lighting, -ray.dir, pos)
           
     colour = colour / len(rays)
     return colour
