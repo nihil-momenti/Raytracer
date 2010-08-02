@@ -17,7 +17,7 @@ MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), None, None)
 start = datetime.now()
 
 light = DirectionalLight(0.8,              # Intensity
-                         Vector3(1,1,-1))  # Direction to light
+                         Vector3(1,1,1))  # Direction to light
 
 ambientLight = AmbientLight(0.1)
 
@@ -25,15 +25,15 @@ lighting = [ambientLight, light]
 
 scene = Scene([Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE),
          Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED),
-         Plane(Point3(0.5,0.5,2), Vector3(0,0,-1), MATT_GREEN)])
+         Plane(Point3(0.5,0.5,2), Vector3(0,0,1), MATT_GREEN)])
 
-view = View(Point3(0.5, 0.5, 0), # eye's location
+view = View(Point3(0.5, 0.5, -1), # eye's location
             Vector3(0, 0, 1),    # view direction
             Vector3(0, 1, 0),    # up vector
             90,                  # hfov
-            200,                 # height
-            200,                 # width
-            1)                   # aa level
+            1000,                 # height
+            1000,                 # width
+            2)                   # aa level
 
 camera = Camera(view,
                 scene,

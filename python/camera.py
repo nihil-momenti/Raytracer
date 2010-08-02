@@ -10,23 +10,6 @@ class Camera(object):
     self.lighting = lighting
 
 
-  def colours_along_rays(self, rays):
-    colours = []
-    hitpoints = self.scene.intersectMultiple(rays)
-    for index in range(len(hitpoints)):
-      if hitpoints[index][1] == float('Inf'):
-        colours.append(BACKGROUND)
-      else:
-        (obj, alpha) = hitpoints[index]
-        try:colours.append(obj.material.lit_colour(obj.normal(rays[index].pos(alpha)), self.lighting, -rays[index].dir))
-        except GeomException:
-          print obj
-          print alpha
-          print rays[index]
-          
-    return colours
-  
-  
   def colour_of_pixel(self, row, col):
     colour = Colour(0,0,0)
     rays = self.view.eye_rays(row, col)
