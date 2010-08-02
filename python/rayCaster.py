@@ -16,10 +16,10 @@ MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), None, None)
 
 start = datetime.now()
 
-light = FocusedLight(Colour(0.8, 0.8, 0.8),  # Intensity
-                     Point3(1, 1, 0),   # Location of light
-                     Vector3(-0.5, -0.5, 0.5),       # Direction of light
-                     10)                      # Spread of light
+light = FocusedLight(Colour(0.8, 0.8, 0.8),
+                     Point3(0.7, 1.0, -1),
+                     Vector3(-0.1,-0.3,1),
+                     50)
 
 ambientLight = AmbientLight(Colour(0.1,0.1,0.1))
 
@@ -33,14 +33,14 @@ view = View(Point3(0.5, 0.5, -1), # eye's location
             Vector3(0, 0, 1),    # view direction
             Vector3(0, 1, 0),    # up vector
             90,                  # hfov
-            300,                 # height
-            300,                 # width
-            2)                   # aa level
+            100,                 # height
+            100,                 # width
+            1)                   # aa level
 
 camera = Camera(view,
                 scene,
                 lighting)
 
 img = camera.take_photo()
-img.save('image.bmp')    # Display image in default image-viewer application
+img.save('image2.bmp')    # Display image in default image-viewer application
 print "Rendering time:", datetime.now() - start

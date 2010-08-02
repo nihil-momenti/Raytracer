@@ -11,12 +11,12 @@ class Material(object):
     self.shininess = shininess
 
 
-  def lit_colour(self, normal, lighting, view_vector, point):
+  def lit_colour(self, scene, normal, lighting, view_vector, point):
     reflection = Colour(0,0,0)
     for light in lighting:
-      reflection += self.diffuse_colour * light.diffuseLighting(normal, point)
+      reflection += self.diffuse_colour * light.diffuseLighting(normal, point, scene)
     
       if self.shininess is not None:
-        reflection += self.specular_colour * (light.specularLighting(normal, view_vector, point) ** self.shininess)
+        reflection += self.specular_colour * (light.specularLighting(normal, view_vector, point, scene) ** self.shininess)
 
     return reflection

@@ -21,7 +21,7 @@ class Camera(object):
         (obj, alpha) = hitpoint
         pos = ray.pos(alpha)
         normal = obj.normal(pos)
-        colour += obj.material.lit_colour(normal, self.lighting, -ray.dir, pos)
+        colour += obj.material.lit_colour(self.scene, normal, self.lighting, -ray.dir, pos)
           
     colour = colour / len(rays)
     return colour
