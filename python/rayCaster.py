@@ -10,6 +10,8 @@ from lighting import *
 from lightbulb import *
 from geom3 import Point3, Vector3, Ray3, unit
 
+import psyco
+psyco.full()
 
 SHINY_RED = Material(Colour(0.7, 0.3, 0.2), Colour(0.4,0.4,0.4), 100)
 SHINY_BLUE = Material(Colour(0.2, 0.3, 0.7), Colour(0.8,0.8,0.8), 200)
@@ -24,25 +26,25 @@ scene = Scene()
 #                     Vector3(-0.1,-0.3,1),
 #                     50, scene)
 
-LightBulb(Colour(0, 0, 0.8), Point3(0.5, 1, 0), 0.1, scene)
-LightBulb(Colour(0, 0.8, 0), Point3(1, 1, 0), 0.1, scene)
-LightBulb(Colour(0.8, 0, 0), Point3(1, 0.5, 0), 0.1, scene)
+LightBulb(Colour(0.8, 0.8, 0.8), Point3(0.95, -0.2, 0.55), 0.01, scene)
+#LightBulb(Colour(0, 0.8, 0), Point3(1, 1, 0), 0.1, scene)
+#LightBulb(Colour(0.8, 0, 0), Point3(1, 0.5, 0), 0.1, scene)
 AmbientLight(Colour(0.1,0.1,0.1), scene)
 
 Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE, scene)
 Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED, scene)
 Plane(Point3(0.5,0.5,2), Vector3(0,0,-1), MATT_GREEN, scene)
 
-view = View(Point3(0.5, 0.5, -1), # eye's location
+view = View(Point3(0.5, 0.5, -1.2), # eye's location
             Vector3(0, 0, 1),    # view direction
             Vector3(0, 1, 0),    # up vector
-            90,                  # hfov
-            100,                 # height
-            100,                 # width
-            3)                   # aa level
+            45,                  # hfov
+            512,                 # height
+            512,                 # width
+            5)                   # aa level
 
 camera = Camera(view, scene)
 
-img = camera.take_photo()
+img = camera.take_photo_new()
 img.save('image.bmp')    # Display image in default image-viewer application
 print "Rendering time:", datetime.now() - start

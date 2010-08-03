@@ -15,7 +15,6 @@ class LightBulbMaterial(Material):
     super(LightBulbMaterial, self).__init__(None)
     self.casts_shadow = False
     self.light = light
-    self.addition = sqrt(light.value.r ** 2 + light.value.g ** 2 + light.value.b ** 2)
     
   def lit_colour(self, scene, normal, view_vector, point):
-    return (view_vector.dot(normal) ** 2) * self.light.diffuseLighting(-normal, point, scene) + Colour(0.5, 0.5, 0.5)
+    return ((view_vector.dot(normal) ** 2 + 0.5)) * self.light.diffuseLighting(-normal, point, scene)

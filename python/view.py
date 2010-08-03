@@ -14,6 +14,14 @@ class View(object):
     self.topLeft = (viewPoint + viewDirection) - (self.yVector * height / 2 + self.xVector * width / 2)
 
 
+  def eye_ray(self, row, col):
+    dy = self.yVector * (row + 0.5)
+    dx = self.xVector * (col + 0.5)
+    point = self.topLeft + dy + dx
+    ray = Ray3(self.point, point - self.point)
+    return ray
+
+    
   def eye_rays(self, row, col):
     rays = []
     for irow in range(self.multi):
