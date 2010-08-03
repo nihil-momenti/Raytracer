@@ -18,8 +18,8 @@ class View(object):
     rays = []
     for irow in range(self.multi):
       for icol in range(self.multi):
-        dy = self.yVector * (row + (irow + random()) / self.multi)
-        dx = self.xVector * (col + (icol + random()) / self.multi)
+        dy = self.yVector * (row + (irow + random()/2) / self.multi)
+        dx = self.xVector * (col + (icol + random()/2) / self.multi)
         point = self.topLeft + dy + dx
         rays.append(Ray3(self.point, point - self.point))
     return rays

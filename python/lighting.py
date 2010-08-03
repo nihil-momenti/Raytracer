@@ -5,8 +5,10 @@ def distanceLoss(distance):
   return max(0, 5 - distance) / 5
 
 class AmbientLight(object):
-  def __init__(self, value):
+  def __init__(self, value, scene=None):
     self.value = value
+    if scene is not None:
+      scene.addLight(self)
 
   def specularLighting(self, normal, view_vector, point, scene):
     return Colour(0,0,0)
@@ -15,9 +17,11 @@ class AmbientLight(object):
     return self.value
     
 class DirectionalLight(object):
-  def __init__(self, value, direction):
+  def __init__(self, value, direction, scene=None):
     self.value = value
     self.direction = direction.unit()
+    if scene is not None:
+      scene.addLight(self)
 
   def specularLighting(self, normal, view_vector, point, scene):
     direction = self.direction
@@ -38,9 +42,11 @@ class DirectionalLight(object):
 
 
 class PointLight(object):
-  def __init__(self, value, point):
+  def __init__(self, value, point, scene=None):
     self.value = value
     self.point = point
+    if scene is not None:
+      scene.addLight(self)
 
   def specularLighting(self, normal, view_vector, point, scene):
     vector = self.point - point
@@ -63,11 +69,13 @@ class PointLight(object):
 
 
 class FocusedLight(object):
-  def __init__(self, value, point, direction, spread):
+  def __init__(self, value, point, direction, spread, scene=None):
     self.value = value
     self.point = point
     self.direction = -direction.unit()
     self.spread = spread
+    if scene is not None:
+      scene.addLight(self)
 
   def specularLighting(self, normal, view_vector, point, scene):
     vector = self.point - point

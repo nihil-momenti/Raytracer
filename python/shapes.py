@@ -2,12 +2,14 @@ from geom3 import Vector3, Point3
 from math import sqrt
 
 class Sphere(object):
-  def __init__(self, centre, radius, material):
+  def __init__(self, centre, radius, material, scene=None):
     """Create a sphere with a given centre point, radius
     and surface material"""
     self.centre = centre
     self.radius = radius
     self.material = material
+    if scene is not None:
+      scene.addObject(self)
 
 
   def normal(self, p):
@@ -39,10 +41,12 @@ class Sphere(object):
 
 
 class Plane(object):
-  def __init__(self, point, normal, material):
+  def __init__(self, point, normal, material, scene=None):
     self.n = normal.unit()
     self.p = point
     self.material = material
+    if scene is not None:
+      scene.addObject(self)
 
 
   def normal(self, p):

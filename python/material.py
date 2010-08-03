@@ -12,9 +12,9 @@ class Material(object):
     self.casts_shadow = True
 
 
-  def lit_colour(self, scene, normal, lighting, view_vector, point):
+  def lit_colour(self, scene, normal, view_vector, point):
     reflection = Colour(0,0,0)
-    for light in lighting:
+    for light in scene.lighting:
       reflection += self.diffuse_colour * light.diffuseLighting(normal, point, scene)
     
       if self.shininess is not None:
@@ -23,11 +23,3 @@ class Material(object):
     return reflection
 
 
-class LightBulbMaterial(Material):
-  def __init__(self, light):
-    super(LightBulbMaterial, self).__init__(None)
-    self.casts_shadow = False
-    self.light = light
-    
-  def lit_colour(self, scene, normal, lighting, view_vector, point):
-    return self.light.value

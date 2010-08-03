@@ -2,10 +2,9 @@ from PIL import Image
 import colour
 
 class Camera(object):
-  def __init__(self, view, scene, lighting):
+  def __init__(self, view, scene):
     self.view = view
     self.scene = scene
-    self.lighting = lighting
 
 
   def colour_of_pixel(self, row, col):
@@ -19,7 +18,7 @@ class Camera(object):
         (obj, alpha) = hitpoint
         pos = ray.pos(alpha)
         normal = obj.normal(pos)
-        color += obj.material.lit_colour(self.scene, normal, self.lighting, -ray.dir, pos)
+        color += obj.material.lit_colour(self.scene, normal, -ray.dir, pos)
           
     color = color / len(rays)
     return color
@@ -30,10 +29,10 @@ class Camera(object):
     
     perPercent = self.view.height / 100
     
-    print "  0 %",
+    print " 0 %"
     for row in range(self.view.height):
       if row % perPercent == 0:
-        print "\b\b\b\b\b\b", "%2d" % (row / perPercent), "%",
+        print "\b\b\b\b\b\b\b", "%2d" % (row / perPercent), "%"
       for col in range(self.view.width):
         img.putpixel((col, row), self.colour_of_pixel(row, col).intColour())
     
