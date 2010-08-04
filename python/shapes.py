@@ -41,7 +41,7 @@ class Sphere(object):
 
 
 class Plane(object):
-  def __init__(self, point, normal, material, scene=None):
+  def __init__(self, point, normal, material=None, scene=None):
     self.n = normal.unit()
     self.p = point
     self.material = material
@@ -67,6 +67,33 @@ class Plane(object):
   def __repr__(self):
     return "Plane(%s, %s)" % (str(self.p), str(self.n))
 
+
+
+class CSGPlane(object):
+  def __init__(self, point, normal):
+    self.n = normal.unit()
+    self.p = point
+
+
+  def intersect(self, ray):
+    t1 = ray.dir.dot(self.n) # positive if ray is heading in the same direction as the plane normal
+    t2 = (self.n.dot(self.p - ray.start)) # negative if initial point on norm side of plane
+    # print self.n, ray.dir, t1, t2
+    
+    if t1 < 0 and t2 < 0:
+      return ('outwards', t2 / t1)
+    elif t1 > 0 and t2 > 0:
+      return ('inwards', t2 / t1)
+    elif t1 < 0 and t2 >= 0:
+      return ('outside', float('Inf'))
+    elif t1 > 0 and t2 <= 0:
+      return ('inside', float('Inf'))
+    else:
+      print self.p, self.n, ray, t1, t2
+      raise Exception
+
+
+
 class CSG(object):
   def __init__(self, planes, material, scene=None):
     self.planes = planes
@@ -76,10 +103,32 @@ class CSG(object):
 
   def normal(self, point):
     for plane in self.planes:
-      if ((plane.p - point).dot(plane.n) == 0):
-        return plane.n
+      if ((plane.p - point).dot(plane.n) < 0.00001):
+        return -plane.n
     
     
   def intersect(self, ray):
-    intersections = [plane.intersect(ray) for plane in self.planes]
-    return min(intersections)
+    inters = [plane.intersect(ray) for plane in self.planes]
+    # print inters
+
+    inters.sort(key=lambda intersection:intersection[1])
+    
+    if reduce(lambda a,b: a or b[0] == 'outside', inters, False):
+      return float('Inf')
+    
+    inters = filter(lambda inter: inter[1] != float('Inf'), inters)
+    inters.append(None) # Sentinel
+    inters.reverse()
+    
+    # print inters
+    
+    if inters[-1] is None or inters[-1][0] == 'outwards':
+      return float('Inf')
+    
+    while inters[-2] is not None and inters[-2][0] == 'inwards':
+      inters.pop()
+    
+    if inters[-1] is None:
+      return float('Inf')
+    else:
+      return inters[-1][1]

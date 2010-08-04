@@ -10,7 +10,7 @@ class View(object):
     self.multi = multi
     spacing = 2 * tan(hFov * pi / 360) / width
     self.yVector = -spacing * viewUp.unit()
-    self.xVector = spacing * viewUp.cross(viewDirection).unit()
+    self.xVector = spacing * viewUp.unit().cross(viewDirection.unit()).unit()
     self.topLeft = (viewPoint + viewDirection) - (self.yVector * height / 2 + self.xVector * width / 2)
 
 

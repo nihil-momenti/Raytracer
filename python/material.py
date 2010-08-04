@@ -18,8 +18,7 @@ class Material(object):
   def lit_colour(self, scene, normal, view_vector, point, n=0):
     reflection = Colour(0,0,0)
     if self.reflectivity is not None and n < 5:
-      dot = view_vector.dot(normal) 
-      reflection_vector = dot * normal - (view_vector - dot * normal)
+      reflection_vector = view_vector - 2 * view_vector.dot(normal) * normal
       ray = Ray3(point, reflection_vector * 1.00001)
       hitpoint = scene.intersect(ray)
       if hitpoint[1] == float('Inf'):
