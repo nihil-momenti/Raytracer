@@ -35,7 +35,10 @@ AmbientLight(Colour(0.1,0.1,0.1), scene)
 
 Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE, scene)
 Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED, scene)
-Plane(Point3(0.5,0.5,2), Vector3(0,0,-1), REFLECTIVE, scene)
+plane1 = Plane(Point3(0.5,0.5,2), Vector3(0,0,-1))
+plane1 = Plane(Point3(0,0.5,2), Vector3(-1,0,0))
+plane1 = Plane(Point3(0.5,0,2), Vector3(0,-1,0))
+CSG([plane1, plane2, plane3], REFLECTIVE, scene) 
 
 view = View(Point3(0, 0, -1.5), # eye's location
             Vector3(0, 0, 1),    # view direction

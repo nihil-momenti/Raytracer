@@ -66,3 +66,20 @@ class Plane(object):
 
   def __repr__(self):
     return "Plane(%s, %s)" % (str(self.p), str(self.n))
+
+class CSG(object):
+  def __init__(self, planes, material, scene=None):
+    self.planes = planes
+    self.material = material
+    if scene is not None:
+      scene.addObject(self)
+
+  def normal(self, point):
+    for plane in self.planes:
+      if ((plane.p - point).dot(plane.n) == 0):
+        return plane.n
+    
+    
+  def intersect(self, ray):
+    intersections = [plane.intersect(ray) for plane in self.planes]
+    return min(intersections)
