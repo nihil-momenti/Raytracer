@@ -16,6 +16,10 @@ psyco.full()
 SHINY_RED = Material(Colour(0.7, 0.3, 0.2), Colour(0.4,0.4,0.4), 100)
 SHINY_BLUE = Material(Colour(0.2, 0.3, 0.7), Colour(0.8,0.8,0.8), 200)
 MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), None, None)
+REFLECTIVE = Material(None, None, None, 1.0)
+
+import psyco
+psyco.full()
 
 start = datetime.now()
 
@@ -33,7 +37,10 @@ AmbientLight(Colour(0.1,0.1,0.1), scene)
 
 Sphere(Point3(0.35,0.6,0.5), 0.25, SHINY_BLUE, scene)
 Sphere(Point3(0.75,0.2,0.6), 0.15, SHINY_RED, scene)
-Plane(Point3(0.5,0.5,2), Vector3(0,0,-1), MATT_GREEN, scene)
+plane1 = Plane(Point3(0.5,0.5,2), Vector3(0,0,-1))
+plane1 = Plane(Point3(0,0.5,2), Vector3(-1,0,0))
+plane1 = Plane(Point3(0.5,0,2), Vector3(0,-1,0))
+CSG([plane1, plane2, plane3], REFLECTIVE, scene) 
 
 view = View(Point3(0.5, 0.5, -1.2), # eye's location
             Vector3(0, 0, 1),    # view direction
