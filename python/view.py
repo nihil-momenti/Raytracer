@@ -3,7 +3,8 @@ from math import tan, pi
 from random import random
 
 class View(object):
-  def __init__(self, viewPoint, viewDirection, viewUp, hFov, height, width, multi):
+  def __init__(self, viewPoint, lookAtPoint, viewUp, hFov, height, width, multi):
+    viewDirection = (lookAtPoint - viewPoint).unit()
     self.point = viewPoint
     self.width = width
     self.height = height

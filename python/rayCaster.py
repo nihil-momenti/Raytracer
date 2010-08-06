@@ -32,7 +32,7 @@ scene = Scene()
 #                     Vector3(-0.1,-0.3,1),
 #                     50, scene)
 
-LightBulb(Colour(0.8, 0.8, 0.8), Point3(0.95, -0.2, 0.55), 0.01, scene)
+LightBulb(Colour(0.8, 0.8, 0.8), Point3(-0.5, 0.5, 1.5), 0.01, scene)
 #LightBulb(Colour(0, 0.8, 0), Point3(1, 1, 0), 0.1, scene)
 #LightBulb(Colour(0.8, 0, 0), Point3(1, 0.5, 0), 0.1, scene)
 AmbientLight(Colour(0.1,0.1,0.1), scene)
@@ -43,12 +43,12 @@ AmbientLight(Colour(0.1,0.1,0.1), scene)
 # plane2 = Plane(Point3(0,0.5,2), Vector3(-1,0,0), MATT_BLUE, scene)
 # plane3 = Plane(Point3(0.5,0,2), Vector3(0,1,0), MATT_RED, scene)
 CSG([
-  CSGPlane(Point3(0.5,0.5,2), Vector3(0,0,1)),
-  CSGPlane(Point3(0,0.5,3), Vector3(1,0,0)),
-  CSGPlane(Point3(1,0.5,3), Vector3(-1,0,0)),
-  CSGPlane(Point3(0.5,0,3), Vector3(0,1,0)),
-  CSGPlane(Point3(0.5,1,3), Vector3(0,-1,0)),
-  CSGPlane(Point3(0.5,0.5,4), Vector3(0,0,-1))
+  CSGPlane(Point3(0.5,0.5,2), Vector3(0,0,-1)),
+  CSGPlane(Point3(0,0.5,3), Vector3(-1,0,0)),
+  CSGPlane(Point3(1,0.5,3), Vector3(1,0,0)),
+  CSGPlane(Point3(0.5,0,3), Vector3(0,-1,0)),
+  CSGPlane(Point3(0.5,1,3), Vector3(0,1,0)),
+  CSGPlane(Point3(0.5,0.5,4), Vector3(0,0,1))
   ],
   MATT_GREEN,
   scene)
@@ -61,13 +61,13 @@ Sphere(Point3(0,1,4), 0.1, SHINY_RED, scene)
 Sphere(Point3(1,0,4), 0.1, SHINY_RED, scene)
 Sphere(Point3(0,0,4), 0.1, SHINY_RED, scene)
 
-view = View(Point3(-0.5, 1.5, -1), # eye's location
-            Vector3(0.3, -0.3, 1),    # view direction
-            Vector3(0, 1.1, 0.1),    # up vector
+view = View(Point3(-1, 2, 1.5), # eye's location
+            Point3(0.5, 0.5, 3),    # look at point
+            Vector3(0, 1, 0),    # up vector
             45,                  # hfov
-            512,                 # height
-            512,                 # width
-            5)                   # aa level
+            256,                 # height
+            256,                 # width
+            1)                   # aa level
 
 camera = Camera(view, scene)
 

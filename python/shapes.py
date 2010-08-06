@@ -76,17 +76,17 @@ class CSGPlane(object):
 
 
   def intersect(self, ray):
-    t1 = ray.dir.dot(self.n) # positive if ray is heading in the same direction as the plane normal
-    t2 = (self.n.dot(self.p - ray.start)) # negative if initial point on norm side of plane
+    t1 = ray.dir.dot(self.n) # negative if ray is heading in the same direction as the plane normal
+    t2 = (self.n.dot(self.p - ray.start)) # positive if initial point on norm side of plane
     # print self.n, ray.dir, t1, t2
     
-    if t1 < 0 and t2 < 0:
+    if t1 > 0 and t2 > 0:
       return ('outwards', t2 / t1)
-    elif t1 > 0 and t2 > 0:
+    elif t1 < 0 and t2 < 0:
       return ('inwards', t2 / t1)
-    elif t1 < 0 and t2 >= 0:
-      return ('outside', float('Inf'))
     elif t1 > 0 and t2 <= 0:
+      return ('outside', float('Inf'))
+    elif t1 < 0 and t2 >= 0:
       return ('inside', float('Inf'))
     else:
       print self.p, self.n, ray, t1, t2
@@ -104,7 +104,7 @@ class CSG(object):
   def normal(self, point):
     for plane in self.planes:
       if ((plane.p - point).dot(plane.n) < 0.00001):
-        return -plane.n
+        return plane.n
     
     
   def intersect(self, ray):

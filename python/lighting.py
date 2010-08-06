@@ -2,7 +2,7 @@ from colour import Colour
 from geom3 import Ray3
 
 def distanceLoss(distance):
-  return max(0, 5 - distance) / 5
+  return (max(0, 8 - distance) / 8) ** 3
 
 class AmbientLight(object):
   def __init__(self, value, scene=None):
@@ -62,9 +62,16 @@ class PointLight(object):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-    hitpoint = scene.intersect(Ray3(self.point, -direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
-      return Colour(0,0,0)
+#    finished = False
+#    ray = Ray3(point, direction)
+#    while not finished:
+#      hitpoint = scene.intersect(ray)
+#      if hitpoint[0] is not None and hitpoint[0].material.casts_shadow is False:
+#        ray = Ray3(ray.pos(hitpoint[1]) + 0.00001 * direction, direction)
+#      elif (hitpoint[1] < distance):
+#        return Colour(0,0,0)
+#      else:
+#        finished = True
     return self.value * distanceLoss(distance) *  max(0, direction.dot(normal))
 
 
