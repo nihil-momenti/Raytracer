@@ -62,7 +62,7 @@ class PointLight(object):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
+    hitpoint = scene.intersect(Ray3(self.point, -direction))
     if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
       return Colour(0,0,0)
     return self.value * distanceLoss(distance) *  max(0, direction.dot(normal))

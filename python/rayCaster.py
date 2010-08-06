@@ -10,9 +10,6 @@ from lighting import *
 from lightbulb import *
 from geom3 import Point3, Vector3, Ray3, unit
 
-import psyco
-psyco.full()
-
 SHINY_RED = Material(Colour(0.7, 0.3, 0.2), Colour(0.4,0.4,0.4), 100)
 SHINY_BLUE = Material(Colour(0.2, 0.3, 0.7), Colour(0.8,0.8,0.8), 200)
 MATT_GREEN = Material(Colour(0.1, 0.7, 0.1), None, None)
@@ -20,8 +17,11 @@ MATT_BLUE = Material(Colour(0.1, 0.1, 0.7), None, None)
 MATT_RED = Material(Colour(0.7, 0.1, 0.1), None, None)
 REFLECTIVE = Material(None, None, None, 1.0)
 
-import psyco
-psyco.full()
+try:
+  import psyco
+  psyco.full()
+except ImportError:
+  print "Psyco not available"
 
 start = datetime.now()
 
@@ -61,13 +61,13 @@ Sphere(Point3(0,1,4), 0.1, SHINY_RED, scene)
 Sphere(Point3(1,0,4), 0.1, SHINY_RED, scene)
 Sphere(Point3(0,0,4), 0.1, SHINY_RED, scene)
 
-view = View(Point3(-0.5, 0.5, -1), # eye's location
-            Vector3(0, 0, 1),    # view direction
-            Vector3(0, 1, 0),    # up vector
+view = View(Point3(-0.5, 1.5, -1), # eye's location
+            Vector3(0.3, -0.3, 1),    # view direction
+            Vector3(0, 1.1, 0.1),    # up vector
             45,                  # hfov
-            256,                 # height
-            256,                 # width
-            1)                   # aa level
+            512,                 # height
+            512,                 # width
+            5)                   # aa level
 
 camera = Camera(view, scene)
 

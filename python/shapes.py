@@ -109,7 +109,7 @@ class CSG(object):
     
   def intersect(self, ray):
     inters = [plane.intersect(ray) for plane in self.planes]
-    # print inters
+    #print inters
 
     inters.sort(key=lambda intersection:intersection[1])
     
@@ -120,15 +120,23 @@ class CSG(object):
     inters.append(None) # Sentinel
     inters.reverse()
     
-    # print inters
+    #print inters
     
     if inters[-1] is None or inters[-1][0] == 'outwards':
       return float('Inf')
     
     while inters[-2] is not None and inters[-2][0] == 'inwards':
       inters.pop()
-    
+
     if inters[-1] is None:
       return float('Inf')
-    else:
-      return inters[-1][1]
+
+    inter = inters.pop()
+
+    while inters[-1] is not None and inters[-1][0] == 'outwards':
+      inters.pop()
+
+    if inters[-1] is not None and inters[-1][0] == 'inwards':
+      return float('Inf')
+
+    return inter[1]
