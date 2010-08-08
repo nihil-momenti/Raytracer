@@ -1,7 +1,3 @@
-'''A simplified version of the material class from lab 3 in which
-   the illumination is defined by an associated lighting class, which has
-   just a directional white light source and a white ambient component'''
-
 from colour import Colour
 from geom3 import Ray3
 
@@ -18,8 +14,8 @@ class Material(object):
   def lit_colour(self, scene, normal, view_vector, point, n=0):
     reflection = Colour(0,0,0)
     if self.reflectivity is not None and n < 5:
-      reflection_vector = view_vector - 2 * view_vector.dot(normal) * normal
-      ray = Ray3(point, reflection_vector * 1.00001)
+      reflection_vector = 2 * view_vector.dot(normal) * normal - view_vector
+      ray = Ray3(point + 0.00001 * reflection_vector, reflection_vector)
       hitpoint = scene.intersect(ray)
       if hitpoint[1] == float('Inf'):
         reflection += self.reflectivity * Colour(0.6,0.6,0.6)
@@ -27,7 +23,7 @@ class Material(object):
         (obj, alpha) = hitpoint
         pos = ray.pos(alpha)
         norm = obj.normal(pos)
-        reflection += self.reflectivity * obj.material.lit_colour(scene, norm, -ray.dir, pos, n+1)
+        reflection += self.reflectivity * obj.material(pos).lit_colour(scene, norm, -ray.dir, pos, n+1)
 
     if self.refractivity is not None:
       reflection += Colour(0,0,0)

@@ -22,7 +22,7 @@ class Camera(object):
       (obj, alpha) = hitpoint
       pos = ray.pos(alpha)
       normal = obj.normal(pos)
-      return obj.material.lit_colour(self.scene, normal, -ray.dir, pos)
+      return obj.material(pos).lit_colour(self.scene, normal, -ray.dir, pos)
 
   def colour_of_pixel(self, row, col):
     color = colour.Colour(0,0,0)
@@ -35,7 +35,7 @@ class Camera(object):
         (obj, alpha) = hitpoint
         pos = ray.pos(alpha)
         normal = obj.normal(pos)
-        color += obj.material.lit_colour(self.scene, normal, -ray.dir, pos)
+        color += obj.material(pos).lit_colour(self.scene, normal, -ray.dir, pos)
           
     color = color / len(rays)
     return color
@@ -43,8 +43,8 @@ class Camera(object):
 
   def check_pixel(self, pixels, row, col):
     color = pixels[row][col]
-    for icol in range(-2, 3):
-      for irow in range(-2, 3):
+    for icol in range(-1, 2):
+      for irow in range(-1, 2):
         if diff(pixels[min(self.view.height - 1, max(0, row + irow))][min(self.view.width - 1, max(0, col + icol))], color) > 0.01:
           return self.colour_of_pixel(row, col)
     return color
@@ -72,19 +72,20 @@ class Camera(object):
   def take_photo_new(self):
     img = Image.new("RGB", (self.view.width, self.view.height))
     
-    perPercent = math.ceil(self.view.height / 100.0)
-    
-    print 1
+    print "Starting first pass..."
     pixels = [[self.single_colour_of_pixel(row, col)
       for col in range(self.view.width)]
       for row in range(self.view.height)]
     
-    print 2
-    [[img.putpixel((col, row), self.check_pixel(pixels, row, col).intColour())
+    print "Starting anti-aliasing..."
+    pixels = [[self.check_pixel(pixels, row, col)
       for col in range(self.view.width)]
       for row in range(self.view.height)]
     
-    print 3
+    [[img.putpixel((col, row), pixels[row][col].intColour())
+      for col in range(self.view.width)]
+      for row in range(self.view.height)]
+    
     return img
 
 

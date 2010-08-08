@@ -1,107 +1,124 @@
 from colour import Colour
 from geom3 import Ray3
 
-def distanceLoss(distance):
-  return (max(0, 8 - distance) / 8) ** 3
-
-class AmbientLight(object):
+class Light(object):
   def __init__(self, value, scene=None):
     self.value = value
     if scene is not None:
       scene.addLight(self)
+  
+  
+  def distanceLoss(self, distance):
+    return (max(0, 8 - distance) / 8) ** 3
+  
+  
+  def checkShadow(self, point, direction, distance, scene):
+      ray = Ray3(point + direction * 0.0001, direction)
+      hitpoint = scene.intersect(ray)
+      (obj, alpha) = hitpoint
+      pos = ray.pos(alpha)
+      return (alpha < distance and obj.material(pos).casts_shadow)
 
+
+
+class AmbientLight(Light):
+  def __init__(self, value, scene=None):
+    super(AmbientLight, self).__init__(value, scene)
+  
+  
   def specularLighting(self, normal, view_vector, point, scene):
     return Colour(0,0,0)
-
+  
+  
   def diffuseLighting(self, normal, point, scene):
     return self.value
-    
-class DirectionalLight(object):
+
+
+
+class DirectionalLight(Light):
   def __init__(self, value, direction, scene=None):
-    self.value = value
-    self.direction = direction.unit()
-    if scene is not None:
-      scene.addLight(self)
-
+    super(DirectionalLight, self).__init__(value, scene)
+    self.direction = -direction.unit()
+  
+  
   def specularLighting(self, normal, view_vector, point, scene):
-    direction = self.direction
-    distance = float('Inf')
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+    if self.checkShadow(point, self.direction, float('Inf'), scene):
       return Colour(0,0,0)
-    h = (self.direction + view_vector.unit()).unit()
-    return self.value * max(0, h.dot(normal))
-
+    else:
+      h = (self.direction + view_vector.unit()).unit()
+      return self.value * max(0, h.dot(normal))
+  
+  
   def diffuseLighting(self, normal, point, scene):
-    direction = self.direction
-    distance = float('Inf')
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+    if self.checkShadow(point, self.direction, float('Inf'), scene):
       return Colour(0,0,0)
-    return self.value * max(0, self.direction.dot(normal))
+    else:
+      return self.value * max(0, self.direction.dot(normal))
 
 
-class PointLight(object):
+
+class PointLight(Light):
   def __init__(self, value, point, scene=None):
-    self.value = value
+    super(PointLight, self).__init__(value, scene)
     self.point = point
-    if scene is not None:
-      scene.addLight(self)
-
+  
+  
   def specularLighting(self, normal, view_vector, point, scene):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+    
+    if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
-    h = (direction + view_vector.unit()).unit()
-    return self.value * distanceLoss(distance) * max(0, h.dot(normal))
-
+    else:
+      h = (direction + view_vector.unit()).unit()
+      return self.value * self.distanceLoss(distance) * max(0, h.dot(normal))
+  
+  
   def diffuseLighting(self, normal, point, scene):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-#    finished = False
-#    ray = Ray3(point, direction)
-#    while not finished:
-#      hitpoint = scene.intersect(ray)
-#      if hitpoint[0] is not None and hitpoint[0].material.casts_shadow is False:
-#        ray = Ray3(ray.pos(hitpoint[1]) + 0.00001 * direction, direction)
-#      elif (hitpoint[1] < distance):
-#        return Colour(0,0,0)
-#      else:
-#        finished = True
-    return self.value * distanceLoss(distance) *  max(0, direction.dot(normal))
+    
+    if self.checkShadow(point, direction, distance, scene):
+      return Colour(0,0,0)
+    else:
+      return self.value * self.distanceLoss(distance) *  max(0, direction.dot(normal))
 
 
-class FocusedLight(object):
-  def __init__(self, value, point, direction, spread, scene=None):
-    self.value = value
+
+class FocusedLight(Light):
+  def __init__(self, value, point, direction, angle, scene=None):
+    super(FocusedLight, self).__init__(value, scene)
     self.point = point
     self.direction = -direction.unit()
-    self.spread = spread
-    if scene is not None:
-      scene.addLight(self)
-
+    self.angle = angle
+  
+  
+  def spread(self, direction):
+      return max(0, direction.dot(self.direction)) ** self.spread
+    
+  
+  
   def specularLighting(self, normal, view_vector, point, scene):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+    
+    if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
-    multiplier = max(0, direction.dot(self.direction)) ** self.spread
-    h = (direction + view_vector.unit()).unit()
-    return self.value * multiplier * distanceLoss(distance) *  max(0, h.dot(normal))
-
+    else:
+      h = (direction + view_vector.unit()).unit()
+      return self.value * self.spread(direction) * self.distanceLoss(distance) *  max(0, h.dot(normal))
+  
+  
   def diffuseLighting(self, normal, point, scene):
     vector = self.point - point
     direction = vector.unit()
     distance = vector.length()
-    hitpoint = scene.intersect(Ray3(point + direction * 0.0001, direction))
-    if (hitpoint[1] < distance and hitpoint[0].material.casts_shadow):
+    
+    if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
-    multiplier = max(0, direction.dot(self.direction)) ** self.spread
-    return self.value * multiplier * distanceLoss(distance) *  max(0, direction.dot(normal))
+    else:
+      return self.value * self.spread(direction) * self.distanceLoss(distance) *  max(0, direction.dot(normal))
 

@@ -5,6 +5,7 @@ from random import random
 class View(object):
   def __init__(self, viewPoint, lookAtPoint, viewUp, hFov, height, width, multi):
     viewDirection = (lookAtPoint - viewPoint).unit()
+    viewUp = viewUp - viewDirection * viewUp.dot(viewDirection)
     self.point = viewPoint
     self.width = width
     self.height = height
@@ -27,8 +28,8 @@ class View(object):
     rays = []
     for irow in range(self.multi):
       for icol in range(self.multi):
-        dy = self.yVector * (row + (irow + random()/2) / self.multi)
-        dx = self.xVector * (col + (icol + random()/2) / self.multi)
+        dy = self.yVector * (row + (irow + 0.5) / self.multi)
+        dx = self.xVector * (col + (icol + 0.5) / self.multi)
         point = self.topLeft + dy + dx
         rays.append(Ray3(self.point, point - self.point))
     return rays
