@@ -30,71 +30,80 @@ start = datetime.now()
 
 scene = Scene()
 
-DirectionalLight(Colour(0.8,0.8,0.8), Vector3(-1,-1,-1))
-# LightBulb(Colour(0.8, 0.8, 0.8), Point3(1, 0, 0), 0.05, scene)
+FocusedLight(Colour(0.8,0.8,0.8), Point3(-0.1, -0.5, 0.2), Point3(0, -0.6, 0.3), 30, scene)
+LightBulb(Colour(0.8, 0.8, 0.8), Point3(1, 0, 0), 0.05, scene)
 # LightBulb(Colour(0.8, 0.8, 0.8), Point3(0, 0, -0.5), 0.05, scene)
 AmbientLight(Colour(0.1,0.1,0.1), scene)
 
-##Mirror
+##Mirror glass
 Translation(
   Rotation(
-    Union([
-      Intersection([
-        Plane(Point3( 0  , 0  , 0   ), Vector3( 0, 0,-1)),
-        Plane(Point3( 0  , 0  , 0.01), Vector3( 0, 0, 1)),
-        Plane(Point3( 0.5, 0  , 0   ), Vector3( 1, 0, 0)),
-        Plane(Point3(-0.5, 0  , 0   ), Vector3(-1, 0, 0)),
-        Plane(Point3( 0  , 0.5, 0   ), Vector3( 0, 1, 0)),
-        Plane(Point3( 0  ,-0.5, 0   ), Vector3( 0,-1, 0)),
-        ],
-        REFLECTIVE
-      ),
-      Intersection([
-        Plane(Point3( 0   , 0   , 0  ), Vector3( 0, 0,-1)),
-        Plane(Point3( 0   , 0   , 0.1), Vector3( 0, 0, 1)),
-        Plane(Point3( 0.53, 0   , 0  ), Vector3( 1, 0, 0)),
-        Plane(Point3(-0.53, 0   , 0  ), Vector3(-1, 0, 0)),
-        Plane(Point3( 0   , 0.53, 0  ), Vector3( 0, 1, 0)),
-        Plane(Point3( 0   ,-0.53, 0  ), Vector3( 0,-1, 0)),
-        ],
-        SHINY_RED
-      ),
+    Intersection([
+      Plane(Point3( 0  , 0  , 0   ), Vector3( 0, 0,-1)),
+      Plane(Point3( 0  , 0  , 0.01), Vector3( 0, 0, 1)),
+      Plane(Point3( 0.5, 0  , 0   ), Vector3( 1, 0, 0)),
+      Plane(Point3(-0.5, 0  , 0   ), Vector3(-1, 0, 0)),
+      Plane(Point3( 0  , 0.5, 0   ), Vector3( 0, 1, 0)),
+      Plane(Point3( 0  ,-0.5, 0   ), Vector3( 0,-1, 0)),
     ]),
     Vector3(-0.8,1,0), 40
   ),
   Vector3(0.4,0,0.8),
-  None,
+  REFLECTIVE,
   scene
 )
 
-## Pedestal
+##Mirror frame
 Translation(
   Rotation(
-    Union([
-      Intersection([
-        Plane(Point3( 0  , 0   , 0  ), Vector3( 0, 0,-1)),
-        Plane(Point3( 0  , 0   , 0.1), Vector3( 0, 0, 1)),
-        Union([
-          Intersection([
-            Plane(Point3( 0.05, 0   , 0  ), Vector3( 1, 0, 0)),
-            Plane(Point3(-0.05, 0   , 0  ), Vector3(-1, 0, 0)),
-            Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0, 1, 0)),
-            Plane(Point3( 0  , 0.1 , 0  ), Vector3( 0,-1, 0)),
-          ]),
-          Intersection([
-            Plane(Point3( 0.15, 0   , 0  ), Vector3( 1, 0, 0)),
-            Plane(Point3(-0.15, 0   , 0  ), Vector3(-1, 0, 0)),
-            Plane(Point3( 0  , 0.1 , 0  ), Vector3( 0, 1, 0)),
-            Plane(Point3( 0  , 0   , 0  ), Vector3( 0,-1, 0)),
-          ]),
-        ]),
-      ], SHINY_RED),
-      # Sphere(Point3(-0.025,0.15,0), 0.02, REFLECTIVE),
-      ]),
+    Intersection([
+      Plane(Point3( 0   , 0   , 0.0001  ), Vector3( 0, 0,-1)),
+      Plane(Point3( 0   , 0   , 0.1), Vector3( 0, 0, 1)),
+      Plane(Point3( 0.53, 0   , 0  ), Vector3( 1, 0, 0)),
+      Plane(Point3(-0.53, 0   , 0  ), Vector3(-1, 0, 0)),
+      Plane(Point3( 0   , 0.53, 0  ), Vector3( 0, 1, 0)),
+      Plane(Point3( 0   ,-0.53, 0  ), Vector3( 0,-1, 0)),
+    ]),
+    Vector3(-0.8,1,0), 40
+  ),
+  Vector3(0.4,0,0.8),
+  SHINY_RED,
+  scene
+)
+
+## Pedestal Base
+Translation(
+  Rotation(
+    Intersection([
+      Plane(Point3( 0  , 0   , 0  ), Vector3( 0, 0,-1)),
+      Plane(Point3( 0  , 0   , 0.1), Vector3( 0, 0, 1)),
+      Plane(Point3( 0.15, 0   , 0  ), Vector3( 1, 0, 0)),
+      Plane(Point3(-0.15, 0   , 0  ), Vector3(-1, 0, 0)),
+      Plane(Point3( 0  , 0.1 , 0  ), Vector3( 0, 1, 0)),
+      Plane(Point3( 0  , 0   , 0  ), Vector3( 0,-1, 0)),
+    ]),
     Vector3(0,1,0), 30
   ),
   Vector3(0,-0.6,0.3),
-  None,
+  SHINY_RED,
+  scene
+)
+
+## Pedestal Top
+Translation(
+  Rotation(
+    Intersection([
+      Plane(Point3( 0  , 0   , 0  ), Vector3( 0, 0,-1)),
+      Plane(Point3( 0  , 0   , 0.1), Vector3( 0, 0, 1)),
+      Plane(Point3( 0.05, 0   , 0  ), Vector3( 1, 0, 0)),
+      Plane(Point3(-0.05, 0   , 0  ), Vector3(-1, 0, 0)),
+      Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0, 1, 0)),
+      Plane(Point3( 0  , 0.1 , 0  ), Vector3( 0,-1, 0)),
+    ]),
+    Vector3(0,1,0), 30
+  ),
+  Vector3(0,-0.6,0.3),
+  SHINY_RED,
   scene
 )
 

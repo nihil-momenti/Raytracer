@@ -1,5 +1,6 @@
 from colour import Colour
 from geom3 import Ray3
+import math
 
 class Light(object):
   def __init__(self, value, scene=None):
@@ -88,16 +89,19 @@ class PointLight(Light):
 
 
 class FocusedLight(Light):
-  def __init__(self, value, point, direction, angle, scene=None):
+  def __init__(self, value, point, aim_point, angle, scene=None):
     super(FocusedLight, self).__init__(value, scene)
     self.point = point
-    self.direction = -direction.unit()
-    self.angle = angle
+    self.direction = (point - aim_point).unit()
+    self.angle = math.radians(angle)
   
   
   def spread(self, direction):
-      return max(0, direction.dot(self.direction)) ** self.spread
-    
+    theta = math.acos(direction.dot(self.direction))
+    if theta < 0:
+      return 0
+    else:
+      return max(0, self.angle - theta) / self.angle
   
   
   def specularLighting(self, normal, view_vector, point, scene):
