@@ -23,6 +23,7 @@ REFLECTIVE = Material(None, None, None, 1.0)
 try:
   import psyco
   psyco.full()
+  "Psyco running"
 except ImportError:
   print "Psyco not available"
 
@@ -30,7 +31,7 @@ start = datetime.now()
 
 scene = Scene()
 
-FocusedLight(Colour(0.8,0.8,0.8), Point3(-0.1, -0.5, 0.2), Point3(0, -0.6, 0.3), 30, scene)
+FocusedLight(Colour(3,3,3), Point3(-0.4, 2, 0), Point3(0, -0.4, 0.35), 10, scene)
 LightBulb(Colour(0.8, 0.8, 0.8), Point3(1, 0, 0), 0.05, scene)
 # LightBulb(Colour(0.8, 0.8, 0.8), Point3(0, 0, -0.5), 0.05, scene)
 AmbientLight(Colour(0.1,0.1,0.1), scene)
@@ -107,11 +108,14 @@ Translation(
   scene
 )
 
+## Reflective Ball
+Sphere(Point3(0,-0.3,0.3), 0.07, REFLECTIVE, scene)
+
 
 
 Plane(Point3(0,-0.6,0), Vector3(0,1,0),REFLECTIVE_BLUE,scene)
-# Plane(Point3(-0.6,0,0), Vector3(1,0,0),REFLECTIVE_BLUE,scene)
-# Plane(Point3(0,0,2), Vector3(0,0,-1),REFLECTIVE_BLUE,scene)
+Plane(Point3(-0.6,0,0), Vector3(1,0,0),REFLECTIVE_BLUE,scene)
+Plane(Point3(0,0,3), Vector3(0,0,-1),REFLECTIVE_BLUE,scene)
 
 
 # Rotation(
@@ -136,8 +140,8 @@ Plane(Point3(0,-0.6,0), Vector3(0,1,0),REFLECTIVE_BLUE,scene)
 # Sphere(Point3(1,0,4), 0.1, SHINY_RED, scene)
 # Sphere(Point3(0,0,4), 0.1, SHINY_RED, scene)
 
-view = View(Point3(0, 0.2, -2), # eye's location
-            Point3(0, 0, 0),    # look at point
+view = View(Point3(0, -0.2, -2), # eye's location
+            Point3(0, -0.2, 0),    # look at point
             Vector3(0, 1, 0),    # up vector
             45,                  # hfov
             225,                 # height
