@@ -116,7 +116,7 @@ def generateScene():
   
   
   
-  view = View(Point3(0, -1, -2), # eye's location
+  view = View(Point3(0, 1, -2), # eye's location
               Point3(0,  0, 0),    # look at point
               Vector3(0, 1, 0),    # up vector
               45,                  # hfov
