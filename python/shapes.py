@@ -3,13 +3,9 @@ from math import sqrt
 
 class Shape(object):
   def __init__(self, material=None, scene=None):
-    self.m = material
+    self.material = material
     if scene is not None:
       scene.addObject(self)
-  
-  
-  def material(self, point):
-    return self.m
 
 
 

@@ -9,13 +9,6 @@ class Transform(Shape):
     self.shape = shape
   
   
-  def material(self, point):
-    if self.m is not None:
-      return self.m
-    else:
-      return self.shape.material(self.transform(point))
-  
-  
   def point_on_surface(self, p):
     return self.shape.point_on_surface(self.transofrm(p))
   

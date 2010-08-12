@@ -18,7 +18,7 @@ class Light(object):
       hitpoint = scene.intersect(ray)
       (obj, alpha) = hitpoint
       pos = ray.pos(alpha)
-      return (alpha < distance and obj.material(pos).casts_shadow)
+      return (alpha < distance and obj.material.casts_shadow)
 
 
 
@@ -101,7 +101,7 @@ class FocusedLight(Light):
     if theta < 0:
       return 0
     else:
-      return max(0, self.angle - theta) / self.angle
+      return (max(0, self.angle - theta) / self.angle) ** 2
   
   
   def specularLighting(self, normal, view_vector, point, scene):

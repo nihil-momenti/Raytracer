@@ -23,7 +23,7 @@ class Material(object):
         (obj, alpha) = hitpoint
         pos = ray.pos(alpha)
         norm = obj.normal(pos)
-        reflection += self.reflectivity * obj.material(pos).lit_colour(scene, norm, -ray.dir, pos, n+1)
+        reflection += self.reflectivity * obj.material.lit_colour(scene, norm, -ray.dir, pos, n+1)
 
     if self.refractivity is not None:
       reflection += Colour(0,0,0)
