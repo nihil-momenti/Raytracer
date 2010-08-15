@@ -120,9 +120,9 @@ def generateScene():
               Point3(0,  0, 0),    # look at point
               Vector3(0, 1, 0),    # up vector
               45,                  # hfov
-              100,                 # height
-              200,                 # width
-              1)                   # aa level
+              200,                 # height
+              400,                 # width
+              4)                   # aa level
   
   return view, scene
 
