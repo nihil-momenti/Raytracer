@@ -26,7 +26,7 @@ def generateScene():
   scene = Scene()
 
   FocusedLight(Colour(3,3,3), Point3(-0.4, 2, 0), Point3(0, -0.4, 0.35), 20, scene)
-  PointLight(Colour(0.8, 0.8, 0.8), Point3(0.5, -1, -2), scene)
+  PointLight(Colour(0.8, 0.8, 0.8), Point3(0, 0, 0), scene)
   AmbientLight(Colour(0.1,0.1,0.1), scene)
   
   ##Mirror glass
@@ -120,9 +120,9 @@ def generateScene():
               Point3(0,  0, 0),    # look at point
               Vector3(0, 1, 0),    # up vector
               45,                  # hfov
-              225,                 # height
-              360,                 # width
-              3)                   # aa level
+              100,                 # height
+              200,                 # width
+              1)                   # aa level
   
   return view, scene
 

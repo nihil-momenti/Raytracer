@@ -42,49 +42,33 @@ class Camera(object):
 
 
   def check_pixel(self, pixels, row, col):
-    color = pixels[row][col]
-    for icol in range(-1, 2):
-      for irow in range(-1, 2):
-        if diff(pixels[min(self.view.height - 1, max(0, row + irow))][min(self.view.width - 1, max(0, col + icol))], color) > 0.01:
+    color = pixels[row * self.view.width + col]
+    icol_min = -1 if col > 1 else 0
+    icol_max = 2 if col < self.view.width - 3 else 1
+    irow_min = -1 if row > 1 else 0
+    irow_max = 2 if row < self.view.height - 3 else 1
+    for icol in range(icol_min, icol_max):
+      for irow in range(irow_min, irow_max):
+        if diff(pixels[(row + irow) * self.view.width + (col + icol)], color) > 0.01:
           return self.colour_of_pixel(row, col)
     return color
-    #if (diff(pixels[min(self.view.height, max(0, row))][min(self.view.height, max(0, col))], color) > 0.1):
-    # if (diff(pixels[max(0, row - 1)][max(0, col - 1)], color) > 0.1):
-      # self.changed[row - 1][col - 1] = True
-      # self.changed[row][col] = True
-    # if (diff(pixels[max(0, row)][max(0, col - 1)], color) > 0.1):
-      # self.changed[row][col - 1] = True
-      # self.changed[row][col] = True
-    # if (diff(pixels[max(0, row - 1)][max(0, col)], color) > 0.1):
-      # self.changed[row - 1][col] = True
-      # self.changed[row][col] = True
-    # if (diff(pixels[min(0, row + 1)][min(0, col - 1)], color) > 0.1):
-      # self.changed[row - 1][col - 1] = True
-      # self.changed[row][col] = True
-    # if (diff(pixels[min(0, row)][min(0, col - 1)], color) > 0.1):
-      # self.changed[row][col - 1] = True
-      # self.changed[row][col] = True
-    # if (diff(pixels[min(0, row - 1)][min(0, col)], color) > 0.1):
-      # self.changed[row - 1][col] = True
-      # self.changed[row][col] = True
 
 
   def take_photo_new(self):
     img = Image.new("RGB", (self.view.width, self.view.height))
+    img_pixels = img.load()
     
     print "Starting first pass..."
-    pixels = [[self.single_colour_of_pixel(row, col)
+    pixels = [self.single_colour_of_pixel(row, col)
+      for row in range(self.view.height)
       for col in range(self.view.width)]
-      for row in range(self.view.height)]
     
     print "Starting anti-aliasing..."
-    pixels = [[self.check_pixel(pixels, row, col)
+    pixels = [self.check_pixel(pixels, row, col)
+      for row in range(self.view.height)
       for col in range(self.view.width)]
-      for row in range(self.view.height)]
     
-    [[img.putpixel((col, row), pixels[row][col].intColour())
-      for col in range(self.view.width)]
-      for row in range(self.view.height)]
+    img.putdata([pixel.intColour() for pixel in pixels])
     
     return img
 
