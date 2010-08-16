@@ -17,8 +17,10 @@ def generateScene():
   MATT_RED   = Material(Colour(0.7,0.1,0.1), None, None)
   MATT_BLUE  = Material(Colour(0.1,0.1,0.7), None, None)
   MATT_GREEN = Material(Colour(0.1,0.7,0.1), None, None)
-  MATT_WHITE = Material(Colour(1.0,1.0,1.0), None, None)
   
+  WALL_COLOUR = Material(Colour(1.0,1.0,1.0), None, None)
+  WALL_COLOUR.casts_shadow = False
+
   REF_BLUE   = Material(Colour(0.2,0.3,0.7), Colour(0.8,0.8,0.8),  200, 0.1)
   
   REFLECTIVE = Material(None, None, None, 1.0)
@@ -109,19 +111,22 @@ def generateScene():
   Plane(Point3(0,-0.6,0), Vector3(0,1,0),REF_BLUE,scene)
   
   ## Walls
-  Plane(Point3(-1  , 0  , 0  ), Vector3( 1, 0, 0), MATT_WHITE, scene)
-  Plane(Point3( 1  , 0  , 0  ), Vector3(-1, 0, 0), MATT_WHITE, scene)
-  Plane(Point3( 0  , 0  , 2  ), Vector3( 0, 0,-1), MATT_WHITE, scene)
-  Plane(Point3( 0  , 0  ,-2  ), Vector3( 0, 0, 1), MATT_WHITE, scene)
+  Plane(Point3(-1  , 0  , 0  ), Vector3( 1, 0, 0), WALL_COLOUR, scene)
+  Plane(Point3( 1  , 0  , 0  ), Vector3(-1, 0, 0), WALL_COLOUR, scene)
+  Plane(Point3( 0  , 0  , 2  ), Vector3( 0, 0,-1), WALL_COLOUR, scene)
+  Plane(Point3( 0  , 0  ,-2  ), Vector3( 0, 0, 1), WALL_COLOUR, scene)
+
+  ## Roof
+  Plane(Point3(0, 1, 0), Vector3(0, -1, 0), WALL_COLOUR, scene)
   
   
   
   view = View(Point3(0, 1, -2), # eye's location
-              Point3(0,  0, 0),    # look at point
+              Point3(0,0.2, 0),    # look at point
               Vector3(0, 1, 0),    # up vector
               45,                  # hfov
-              200,                 # height
-              400,                 # width
+              900,                 # height
+              1440,                 # width
               4)                   # aa level
   
   return view, scene

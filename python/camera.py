@@ -63,10 +63,10 @@ class Camera(object):
       for row in range(self.view.height)
       for col in range(self.view.width)]
     
-    print "Starting anti-aliasing..."
-    pixels = [self.check_pixel(pixels, row, col)
-      for row in range(self.view.height)
-      for col in range(self.view.width)]
+#    print "Starting anti-aliasing..."
+#    pixels = [self.check_pixel(pixels, row, col)
+#      for row in range(self.view.height)
+#      for col in range(self.view.width)]
     
     img.putdata([pixel.intColour() for pixel in pixels])
     
