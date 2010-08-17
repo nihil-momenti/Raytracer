@@ -46,8 +46,8 @@ class DirectionalLight(Light):
     if self.checkShadow(point, self.direction, float('Inf'), scene):
       return Colour(0,0,0)
     else:
-      h = (self.direction + view_vector.unit()).unit()
-      return self.value * max(0, h.dot(normal))
+      d = (2 * view_vector.dot(normal) * normal - view_vector).unit()
+      return self.value * max(0, d.dot(self.direction))
   
   
   def diffuseLighting(self, normal, point, scene):
@@ -72,8 +72,8 @@ class PointLight(Light):
     if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
     else:
-      h = (direction + view_vector.unit()).unit()
-      return self.value * self.distanceLoss(distance) * max(0, h.dot(normal))
+      d = (2 * view_vector.dot(normal) * normal - view_vector).unit()
+      return self.value * self.distanceLoss(distance) * max(0, d.dot(direction))
   
   
   def diffuseLighting(self, normal, point, scene):
@@ -101,7 +101,7 @@ class FocusedLight(Light):
     if theta < 0:
       return 0
     else:
-      return (max(0, self.angle - theta) / self.angle) ** 2
+      return max(0, self.angle - theta) / self.angle
   
   
   def specularLighting(self, normal, view_vector, point, scene):
@@ -111,9 +111,9 @@ class FocusedLight(Light):
     
     if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
-    else:
-      h = (direction + view_vector.unit()).unit()
-      return self.value * self.spread(direction) * self.distanceLoss(distance) *  max(0, h.dot(normal))
+    else: 
+      d = (2 * view_vector.dot(normal) * normal - view_vector).unit()
+      return self.value * self.spread(direction) * max(0, d.dot(direction))
   
   
   def diffuseLighting(self, normal, point, scene):
@@ -124,5 +124,5 @@ class FocusedLight(Light):
     if self.checkShadow(point, direction, distance, scene):
       return Colour(0,0,0)
     else:
-      return self.value * self.spread(direction) * self.distanceLoss(distance) *  max(0, direction.dot(normal))
+      return self.value * self.spread(direction) * max(0, direction.dot(normal))
 
