@@ -20,12 +20,12 @@ def generateScene():
   MATT_GREEN = Material(Colour(0.1,0.7,0.1), None, None)
   MATT_WHITE = Material(Colour(1  ,1  ,1  ), None, None)
   
-  WALL_TEXTURE = Texture(Point3(0,0,0), # Top left point
+  WALL_TEXTURE = Texture(Point3(0,-0.06,0.06), # Top left point
     'wall_tiles.jpg', Vector3(0,4,0), Vector3(0,0,4), Vector3(4,0,0), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   WALL_TEXTURE.casts_shadow = False
 
-  FLOOR_TEXTURE = Texture(Point3(0,0,0), # Top left point
+  FLOOR_TEXTURE = Texture(Point3(-0.15,0,0.04), # Top left point
     'floor_tiles.jpg', Vector3(4,0,0), Vector3(0,0,4), Vector3(0,4,0),# Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
 
@@ -38,32 +38,40 @@ def generateScene():
   BRONZE = Material(Colour(0.80,0.50,0.20), None, None, 0.1)
 
 
+  STONE = Texture(Point3(0,0,0), # Top left point
+    'stone.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
+    None, None, None) # Specular colour, shininess, reflectivity
+  
+  METAL = Texture(Point3(0,0,0), # Top left point
+    'metal.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
+    None, None, None) # Specular colour, shininess, reflectivity
+  
   WOOD = Texture(Point3(0,0,0), # Top left point
     'Desk_Texture.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   
   scene = Scene()
 
-  FocusedLight(Colour(1,1,1), Point3(-0.1, 1, 0.2), Point3(0, -0.6, 0.3), 20, scene)
-  PointLight(Colour(0.8, 0.8, 0.8), Point3(-0.5, 0, 0), scene)
+  FocusedLight(Colour(2,2,2), Point3(-0.5, 1, -0.2), Point3(0, -0.6, 0.3), 20, scene)
+  PointLight(Colour(1, 1, 1), Point3(0, 0.2, 0), scene)
   AmbientLight(Colour(0.1,0.1,0.1), scene)
   
   ##Mirror glass
-#  Translation(
-#    Rotation(
-#      Intersection([
-#        Plane(Point3( 0  , 0  , 0   ), Vector3( 0, 0,-1)),
-#        Plane(Point3( 0  , 0  , 0.01), Vector3( 0, 0, 1)),
-#        Plane(Point3( 0.5, 0  , 0   ), Vector3( 1, 0, 0)),
-#        Plane(Point3(-0.5, 0  , 0   ), Vector3(-1, 0, 0)),
-#        Plane(Point3( 0  , 0.5, 0   ), Vector3( 0, 1, 0)),
-#        Plane(Point3( 0  ,-0.5, 0   ), Vector3( 0,-1, 0)),
-#      ], REFLECTIVE),
-#      Vector3(-0.4,1,0.1), 40
-#    ),
-#    Vector3(0.4,0,0.8),
-#    scene
-#  )
+  Translation(
+    Rotation(
+      Intersection([
+        Plane(Point3( 0  , 0  , 0   ), Vector3( 0, 0,-1)),
+        Plane(Point3( 0  , 0  , 0.01), Vector3( 0, 0, 1)),
+        Plane(Point3( 0.5, 0  , 0   ), Vector3( 1, 0, 0)),
+        Plane(Point3(-0.5, 0  , 0   ), Vector3(-1, 0, 0)),
+        Plane(Point3( 0  , 0.5, 0   ), Vector3( 0, 1, 0)),
+        Plane(Point3( 0  ,-0.5, 0   ), Vector3( 0,-1, 0)),
+      ], REFLECTIVE),
+      Vector3(-0.4,1,0.1), 40
+    ),
+    Vector3(0.4,0,0.8),
+    scene
+  )
   
   ##Mirror frame
   Translation(
@@ -92,7 +100,7 @@ def generateScene():
         Plane(Point3(-0.3, 0   , 0  ), Vector3(-1, 0, 0)),
         Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0, 1, 0)),
         Plane(Point3( 0  , 0   , 0  ), Vector3( 0,-1, 0)),
-      ], WOOD),
+      ], STONE),
       Vector3(0,1,0), 30
     ),
     Vector3(0,-0.6,0.3),
@@ -109,7 +117,7 @@ def generateScene():
         Plane(Point3(-0.1, 0   , 0  ), Vector3(-1, 0, 0)),
         Plane(Point3( 0  , 0.4 , 0  ), Vector3( 0, 1, 0)),
         Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0,-1, 0)),
-      ], WOOD),
+      ], STONE),
       Vector3(0,1,0), 30
     ),
     Vector3(0,-0.6,0.3),
@@ -126,7 +134,7 @@ def generateScene():
   Sphere(Point3(0.18,-0.3,0.2), 0.09, BRONZE, scene)
 
   ## Textured Ball
-  Sphere(Point3(-0.4, 0, 1), 0.2, WOOD, scene)
+  Sphere(Point3(-0.4, 0, 1), 0.2, METAL, scene)
   
   ## Floor
   Plane(Point3(0,-0.6,0), Vector3(0,1,0), FLOOR_TEXTURE, scene)
