@@ -92,7 +92,7 @@ def generateScene():
         Plane(Point3(-0.3, 0   , 0  ), Vector3(-1, 0, 0)),
         Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0, 1, 0)),
         Plane(Point3( 0  , 0   , 0  ), Vector3( 0,-1, 0)),
-      ], MATT_RED),
+      ], WOOD),
       Vector3(0,1,0), 30
     ),
     Vector3(0,-0.6,0.3),
@@ -109,7 +109,7 @@ def generateScene():
         Plane(Point3(-0.1, 0   , 0  ), Vector3(-1, 0, 0)),
         Plane(Point3( 0  , 0.4 , 0  ), Vector3( 0, 1, 0)),
         Plane(Point3( 0  , 0.2 , 0  ), Vector3( 0,-1, 0)),
-      ], MATT_RED),
+      ], WOOD),
       Vector3(0,1,0), 30
     ),
     Vector3(0,-0.6,0.3),
@@ -124,7 +124,9 @@ def generateScene():
   
   ## Bronze Ball
   Sphere(Point3(0.18,-0.3,0.2), 0.09, BRONZE, scene)
-  
+
+  ## Textured Ball
+  Sphere(Point3(-0.4, 0, 1), 0.2, WOOD, scene)
   
   ## Floor
   Plane(Point3(0,-0.6,0), Vector3(0,1,0), FLOOR_TEXTURE, scene)
