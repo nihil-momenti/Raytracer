@@ -3,9 +3,10 @@
   3d imagery.  There were two stages to implementing this ray tracer, the basic
   ray tracer and some extensions of the ray tracer.
   
-  The basic ray tracer is
-  required to:
-  \begin{itemize}
+  \vspace{10pt}
+
+  The basic ray tracer is required to:
+  \begin{quote}\begin{itemize}
     \item Be able to generate scenes including planes and spheres with a
       single directional light source and an ambient light.
     \item Generate shadows from the directional light when objects occlude each
@@ -14,18 +15,22 @@
       provided field-of-view
     \item Include at least one reflective sphere and must include at least one
       planar surface with a pattern of "texture" on it.
-  \end{itemize}
+  \end{itemize}\end{quote}
+
+  \vspace{10pt}
 
   The extensions that were implemented included:
-  \begin{itemize}
+  \begin{quote}\begin{itemize}
     \item Multiple light sources.  As well as being able to add multiple light
       sources to the scene 4 different types of light sources were provided.
     \item Anti-aliasing. Simple multi-sample anti-aliasing was implemented, this
       had some optimization applied to it.
     \item Transformations. Simple transformations of objects in the scene were
       implemented.
-    \item Constructive solid geometry
-  \end{itemize}
+    \item Constructive solid geometry (CSG). Only intersection based CSG was
+      implemented, the data model chosen for represent shape-ray intersections
+      proved to not work with union CSG.
+  \end{itemize}\end{quote}
   
     
   % stating the context, goals and limitations of the project.

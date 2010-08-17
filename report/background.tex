@@ -1,0 +1,31 @@
+\section{Background}
+  \subsection{Ray tracing}
+    Ray tracing is a very high quality but performance intensive method of
+    generating 3D images.  Ray tracing can be implemented in two fashions,
+    `forwards' or `light-based' ray tracing works by firing rays out of lights
+    and tracing their path throught the scene until they coincide with the view
+    point. This is computationally infeasible as close to 0\% of the rays fired
+    from the lights actually coincide with the view point.  This form of ray
+    tracing is used in some algorithms such as photon mapping, in this case
+    instead of tracing each ray until they intersect the eye they are just
+    traced until a cut-off point is reached and the intermediate intersections
+    of the ray are used to generate the image.
+
+    The other form of ray tracing is `backwards' or 'eye-based' ray tracing,
+    this works by tracing rays from the eye out into the scene and calculating
+    the colour at each ray's intersection with the scene.  Initial ray casting
+    algorithms terminated at this point with just a simple check for whether to
+    light source is occluded by another object at this point or not.  Newer
+    algorithms instead compute reflections and refractions from this point as
+    well. This is done by tracing new rays from the intersection, these rays
+    directions are determined by the shape and material properties at the
+    intersection point.
+
+  \subsection{Shapes}
+    \subsubsection{Plane}
+      One of the simplest shapes to implement in ray tracing is a plane.  We
+      start with the point normal form of the plane equation:
+      \[ \left( \mathbf{p} - \mathbf{c} \right) \cdot \mathbf{n} = 0 \]
+      This describes a plane that passes through the point $\mathbf{c}$ with
+      normal $\mathbf{n}$.  Any point $\mathbf{p}$ which satisfies this equation
+      lies within the plane.
