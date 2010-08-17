@@ -21,12 +21,12 @@ def generateScene():
   MATT_WHITE = Material(Colour(1  ,1  ,1  ), None, None)
   
   WALL_TEXTURE = Texture(Point3(0,0,0), # Top left point
-    'wall_tiles.jpg', Vector3(4,0,0), Vector3(0,0,4), # Texture file, x vector, y vector
-    None, None, 0.1) # Specular colour, shininess, reflectivity
+    'wall_tiles.jpg', Vector3(0,4,0), Vector3(0,0,4), Vector3(4,0,0), # Texture file, x vector, y vector
+    None, None, None) # Specular colour, shininess, reflectivity
   WALL_TEXTURE.casts_shadow = False
 
   FLOOR_TEXTURE = Texture(Point3(0,0,0), # Top left point
-    'floor_tiles.jpg', Vector3(4,0,0), Vector3(0,0,4), # Texture file, x vector, y vector
+    'floor_tiles.jpg', Vector3(4,0,0), Vector3(0,0,4), Vector3(0,4,0),# Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
 
   REF_BLUE   = Material(Colour(0.2,0.3,0.7), Colour(0.2,0.2,0.2),  200, 0.1)
@@ -39,7 +39,7 @@ def generateScene():
 
 
   WOOD = Texture(Point3(0,0,0), # Top left point
-    'Desk_Texture.jpg', Vector3(4,0,0), Vector3(0,0,4), # Texture file, x vector, y vector
+    'Desk_Texture.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   
   scene = Scene()
