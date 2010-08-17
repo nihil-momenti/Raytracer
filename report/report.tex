@@ -4,7 +4,7 @@
 \usepackage{mathptm}
 \usepackage{hyperref}
 \usepackage{epsfig} 
-\usepackage{tipa}
+%\usepackage{tipa}
 \usepackage{subfigure}
 \usepackage{footnote}
 \usepackage[gnu]{newtitle} 
@@ -49,13 +49,14 @@
 \rhead[\helv \thepage]{\helv \thepage}
 \cfoot[]{}
 
-\newpage
-\tableofcontents
-\newpage
+%\newpage
+%\tableofcontents
+%\newpage
 
 \mainmatter
     \input{introduction}
     \input{background}
+  \chapter{Ray tracer}
     \input{implementation}
     \input{results}
     \input{conclusion}

@@ -20,12 +20,12 @@ def generateScene():
   MATT_GREEN = Material(Colour(0.1,0.7,0.1), None, None)
   MATT_WHITE = Material(Colour(1  ,1  ,1  ), None, None)
   
-  WALL_TEXTURE = Texture(Point3(0,-0.06,0.06), # Top left point
+  WALL_TEXTURE = Texture(Point3(-1,-0.6,2), # Top left point
     'wall_tiles.jpg', Vector3(0,4,0), Vector3(0,0,4), Vector3(4,0,0), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   WALL_TEXTURE.casts_shadow = False
 
-  FLOOR_TEXTURE = Texture(Point3(-0.15,0,0.04), # Top left point
+  FLOOR_TEXTURE = Texture(Point3(-1,-0.6,2), # Top left point
     'floor_tiles.jpg', Vector3(4,0,0), Vector3(0,0,4), Vector3(0,4,0),# Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
 
@@ -133,8 +133,8 @@ def generateScene():
   ## Bronze Ball
   Sphere(Point3(0.18,-0.3,0.2), 0.09, BRONZE, scene)
 
-  ## Textured Ball
-  Sphere(Point3(-0.4, 0, 1), 0.2, METAL, scene)
+  ## Reflective Ball
+  Sphere(Point3(0.4, 0, 0.8), 0.2, REFLECTIVE, scene)
   
   ## Floor
   Plane(Point3(0,-0.6,0), Vector3(0,1,0), FLOOR_TEXTURE, scene)
