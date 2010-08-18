@@ -154,9 +154,9 @@ def generateScene():
               Point3(0,0.2, 0),    # look at point
               Vector3(0, 1, 0),    # up vector
               45,                  # hfov
-              400,                 # height
-              640,                # width
-              1)                   # aa level
+              900,                 # height
+              1440,                # width
+              5)                   # aa level
   
   return view, scene
 
