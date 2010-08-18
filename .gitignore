@@ -1,2 +1,11 @@
 *.pyc
 *.bmp
+
+report/make/*
+report/report.aux
+report/report.bbl
+report/report.blg
+report/report.dvi
+report/report.log
+report/report.out
+report/report.pdf
