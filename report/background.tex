@@ -45,11 +45,10 @@
       normal $\mathbf{n}$.  Any point $\mathbf{p}$ which satisfies this equation
       lies within the plane.
 
-      Equating this with the equation for a ray we get:
-      \[ \left( \mathbf{p}_i + t \mathbf{v} - \mathbf{p}_0 \right) \cdot \mathbf{n} = 0 \]
-      Rearranging this we are able to solve for $t$ which tells us how far
-      along the ray it intersects with the plane.
-      \[ t  = \frac{\left( \mathbf{p}_0 - \mathbf{p}_i \right) \cdot \mathbf{n}}{\mathbf{v} \cdot \mathbf{n}}\]
+      Equating this with the equation for a ray we can solve for $t$, the
+      distance along the ray that it intersects the plane:
+      \[ t  = \frac{\left( \mathbf{p}_0 - \mathbf{p}_i \right) \cdot
+         \mathbf{n}}{\mathbf{v} \cdot \mathbf{n}} \]
 
       Finding the normal to the plane is even easier, at all points it is just
       the normal.
@@ -63,12 +62,10 @@
 
       Again we can equate this with the equation for a ray to determine where a
       ray intersects the sphere:
-      \[ \left| P_i + t \mathbf{v} - P_0 \right| = r \]
-      \[ \left( P_i + t \mathbf{v} - P_0 \right) \cdot \left(
-      P_i + t \mathbf{v} - P_0 \right) = r^2 \]
-      \[ \frac{t^2}{2} \mathbf{v} \cdot \mathbf{v} + t \mathbf{v} \cdot \left(P_0 -
-      P_i\right) + \frac{\left(P_0 - P_1\right) \cdot
-      \left(P_0 - P_i\right) - r^2}{2} \]
-      Substituting in $\mathbf{v} \cdot \mathbf{v} = 1$ as $\mathbf{v}$ is a unit vector and $\mathbf{q} = P_1 - P_0$ 
+      \[ t = \mathbf{v} \cdot \mathbf{q} \pm \sqrt{\left(\mathbf{v} \cdot
+         \mathbf{q}\right)^2 + 2 \left(\mathbf{q} \cdot \mathbf{q} - r^2\right)}
+         \]
       
-      
+      The normal for a sphere is slightly more difficult than the plane:
+      \[ \mathbf{n} = \frac{\mathbf{p} - \mathbf{p}_0}{\left| \mathbf{p} -
+         \mathbf{p}_0 \right|} \]
