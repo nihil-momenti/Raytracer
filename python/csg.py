@@ -47,38 +47,3 @@ class Intersection(CSG):
       return (float('Inf'), -float('Inf'))
     else:
       return intersection
-
-
-
-class Union(CSG):
-  def __init__(self, objects, material=None, scene=None):
-    super(Union,self).__init__(material, scene)
-    self.objects = objects
-  
-  
-  def point_on_surface(self, p):
-    for object in self.objects:
-      if object.point_on_surface(p):
-        return True
-    
-    return False
-  
-  
-  def point_inside(self, p):
-    for object in self.objects:
-      if object.point_inside(p):
-        return True
-    
-    return False
-  
-  
-  def intersect(self, ray):
-    inters = [object.intersect(ray) for object in self.objects]
-    
-    intersection = reduce(lambda a,b: (min(a[0], b[0]), max(a[1], b[1])), inters)
-    
-    if (intersection[0] > intersection[1]):
-      return (float('Inf'), -float('Inf'))
-    else:
-      return intersection
-

@@ -54,7 +54,7 @@ class Camera(object):
     return color
 
 
-  def take_photo_new(self):
+  def take_photo(self):
     img = Image.new("RGB", (self.view.width, self.view.height))
     img_pixels = img.load()
     
@@ -69,21 +69,5 @@ class Camera(object):
       for col in range(self.view.width)]
     
     img.putdata([pixel.intColour() for pixel in pixels])
-    
-    return img
-
-
-  def take_photo(self):
-    img = Image.new("RGB", (self.view.width, self.view.height))
-    
-    perPercent = math.ceil(self.view.height / 100.0)
-    
-    for row in range(self.view.height):
-      if row % perPercent == 0:
-        print ("%3d" % (row / perPercent)) + "%"
-      for col in range(self.view.width):
-        img.putpixel((col, row), self.colour_of_pixel(row, col).intColour())
-    
-    print "100%"
     
     return img

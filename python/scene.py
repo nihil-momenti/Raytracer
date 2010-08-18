@@ -16,11 +16,9 @@ class Scene(object):
 
   def intersect(self, ray):
     intersections = [(obj, obj.intersect(ray)[0]) for obj in self.objs]
-    # print intersections
     
     min = (None, float('Inf'))
     for intersection in intersections:
-      # print min, intersection
       if intersection[1] > 0 and intersection[1] < min[1]:
         min = intersection
     

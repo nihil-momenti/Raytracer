@@ -23,7 +23,7 @@ class Texture(Material):
       return self.last_colour[1]
 
     if self.texture is not None:
-      x_to_n = self.x_vector.dot(normal)
+      x_to_n = abs(self.x_vector.dot(normal))
       y_to_n = abs(self.y_vector.dot(normal))
       z_to_n = abs(self.z_vector.dot(normal))
 

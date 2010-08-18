@@ -29,7 +29,6 @@ class Material(object):
     if self.reflectivity is not None and n < 5:
       reflection_vector = 2 * view_vector.dot(normal) * normal - view_vector
       ray = Ray3(point, reflection_vector)
-     # ray = Ray3(point + 0.00001 * reflection_vector, reflection_vector)
       hitpoint = scene.intersect(ray)
       if hitpoint[1] == float('Inf'):
         return self.reflectivity * Colour(0.6,0.6,0.6)
