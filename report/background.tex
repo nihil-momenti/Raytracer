@@ -22,10 +22,53 @@
     intersection point.
 
   \subsection{Shapes}
+    For the following section t.........:
+    \begin{quote}\begin{itemize}
+      \item Lowercase unbolded refers to scalars: $t$
+      \item Capitals refer to points: $P$
+      \item Bold refers to vectors: $\mathbf{v}$
+      \item If a point and vector have the same letter the vector is the
+        position vector of the point: $P \Leftrightarrow \mathbf{p}$
+    \end{itemize}\end{quote}
+
+    \noindent The equation used for rays is:
+    \[ P = P_i + t \mathbf{v} \]
+    Where $P$ is any point on the ray, $P_i$ is a point that the ray passes
+    through, $t$ is a scalar and $\mathbf{v}$ is the direction vector for the
+    ray.
+
     \subsubsection{Plane}
       One of the simplest shapes to implement in ray tracing is a plane.  We
       start with the point normal form of the plane equation:
-      \[ \left( \mathbf{p} - \mathbf{c} \right) \cdot \mathbf{n} = 0 \]
-      This describes a plane that passes through the point $\mathbf{c}$ with
+      \[ \left( \mathbf{p} - \mathbf{p}_0 \right) \cdot \mathbf{n} = 0 \]
+      This describes a plane that passes through the point $\mathbf{p}_0$ with
       normal $\mathbf{n}$.  Any point $\mathbf{p}$ which satisfies this equation
       lies within the plane.
+
+      Equating this with the equation for a ray we get:
+      \[ \left( \mathbf{p}_i + t \mathbf{v} - \mathbf{p}_0 \right) \cdot \mathbf{n} = 0 \]
+      Rearranging this we are able to solve for $t$ which tells us how far
+      along the ray it intersects with the plane.
+      \[ t  = \frac{\left( \mathbf{p}_0 - \mathbf{p}_i \right) \cdot \mathbf{n}}{\mathbf{v} \cdot \mathbf{n}}\]
+
+      Finding the normal to the plane is even easier, at all points it is just
+      the normal.
+
+    \subsubsection{Sphere}
+      The next easiest shape to implement is the sphere.  This is described by
+      the equation:
+      \[ \left| \mathbf{p} - \mathbf{p}_0 \right| = r \]
+      Where $\mathbf{p}_0$ is the center of the sphere, $r$ is the radius of the
+      sphere and $\mathbf{p}$ is any point on the surface of the sphere.
+
+      Again we can equate this with the equation for a ray to determine where a
+      ray intersects the sphere:
+      \[ \left| P_i + t \mathbf{v} - P_0 \right| = r \]
+      \[ \left( P_i + t \mathbf{v} - P_0 \right) \cdot \left(
+      P_i + t \mathbf{v} - P_0 \right) = r^2 \]
+      \[ \frac{t^2}{2} \mathbf{v} \cdot \mathbf{v} + t \mathbf{v} \cdot \left(P_0 -
+      P_i\right) + \frac{\left(P_0 - P_1\right) \cdot
+      \left(P_0 - P_i\right) - r^2}{2} \]
+      Substituting in $\mathbf{v} \cdot \mathbf{v} = 1$ as $\mathbf{v}$ is a unit vector and $\mathbf{q} = P_1 - P_0$ 
+      
+      

@@ -42,8 +42,8 @@ def generateScene():
     'stone.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   
-  METAL = Texture(Point3(0,0,0), # Top left point
-    'metal.jpg', Vector3(4,0,0), Vector3(0,4,0), Vector3(0,0,4), # Texture file, x vector, y vector
+  METAL = Texture(Point3(-1,-0.6,2), # Top left point
+    'metal.jpg', Vector3(0,4,0), Vector3(0,0,4), Vector3(4,0,0), # Texture file, x vector, y vector
     None, None, None) # Specular colour, shininess, reflectivity
   
   WOOD = Texture(Point3(0,0,0), # Top left point
@@ -134,16 +134,16 @@ def generateScene():
   Sphere(Point3(0.18,-0.3,0.2), 0.09, BRONZE, scene)
 
   ## Reflective Ball
-  Sphere(Point3(0.4, 0, 0.8), 0.2, REFLECTIVE, scene)
+  Sphere(Point3(-0.6,-0.3, 1.5), 0.2, REFLECTIVE, scene)
   
   ## Floor
   Plane(Point3(0,-0.6,0), Vector3(0,1,0), FLOOR_TEXTURE, scene)
   
   ## Walls
-  Plane(Point3(-1  , 0  , 0  ), Vector3( 1, 0, 0), WALL_TEXTURE, scene)
-  Plane(Point3( 1  , 0  , 0  ), Vector3(-1, 0, 0), WALL_TEXTURE, scene)
-  Plane(Point3( 0  , 0  , 2  ), Vector3( 0, 0,-1), WALL_TEXTURE, scene)
-  Plane(Point3( 0  , 0  ,-2  ), Vector3( 0, 0, 1), WALL_TEXTURE, scene)
+  Plane(Point3(-1  , 0  , 0  ), Vector3( 1, 0, 0), METAL, scene)
+  Plane(Point3( 1  , 0  , 0  ), Vector3(-1, 0, 0), METAL, scene)
+  Plane(Point3( 0  , 0  , 2  ), Vector3( 0, 0,-1), METAL, scene)
+  Plane(Point3( 0  , 0  ,-2  ), Vector3( 0, 0, 1), METAL, scene)
 
   ## Roof
   Plane(Point3(0, 1, 0), Vector3(0, -1, 0), MATT_WHITE, scene)
