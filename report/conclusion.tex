@@ -1,1 +1,10 @@
 \section{Conclusions}
+  The biggest flaw in the final renderer is its performance.  This could largely
+  be mitigated by moving to a lower level language; or at least implementing the
+  majority of the renderer in a low level language, e.g. writing a C extension
+  for the low level geometry methods.
+
+  An even more drastic performance improvement could be found by implementing
+  the low level functions in OpenCL.  This was contemplated early on in the
+  project but discarded because of the large amount of work that would be
+  required.

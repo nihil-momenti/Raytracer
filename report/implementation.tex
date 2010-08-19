@@ -1,5 +1,5 @@
 \chapter{Implementation}
-  \subsection{Lights}
+  \section{Lights}
     As well as the directional and ambient light sources point light and focused
     lights were added.  Point lights are calculated similarly to directional
     lights, just instead of using their given direction the direction used is
@@ -13,45 +13,45 @@
     the point of intersection and $\theta$ is the angle of the light sources
     spread.
 
-  \subsection{Antialiasing}
-    The method of antialiasing used is just simple multisampling.  Instead of
+  \section{Anti-aliasing}
+    The method of anti-aliasing used is just simple multi-sampling.  Instead of
     sampling each pixel with just a ray through the centre, each pixel is split
     up into a grid of sub-pixels.  Each of these sub-pixels are then sampled
     through their centres and the resulting values are averaged for the pixel.
     The main dis-advantage of this is the major performance hit taken, because
     of the 2d grid used for each pixel even just 2X anti-aliasing requires 4
-    seperate rays per pixel, slowing the algorithm down by 4 times.  Stepping up
-    to 3X anti-aliasing increases this to 9 seperate rays per pixel taking 9
+    separate rays per pixel, slowing the algorithm down by 4 times.  Stepping up
+    to 3X anti-aliasing increases this to 9 separate rays per pixel taking 9
     times as long, or 2.25 times as long as 2X.  To get a really good picture
     you have to sample at at least 4X or 5X, which means you must generate much
     smaller pictures to have them comparable generation times.
 
-    To try and offset this drastic performance hit a simple optimisation was
+    To try and offset this drastic performance hit a simple optimization was
     performed, the algorithm was split into a two pass algorithm.  First pass
     each pixels colour is generated with just a single ray.  Next each pixel is
-    compared to its neighbours and if the colour differs then antialiasing is
+    compared to its neighbours and if the colour differs then anti-aliasing is
     applied to that pixel.  This works very well for images with a lot of single
     shade objects.  As textures and more complex reflections and lighting are
-    applied the performance gain decreases, and infact if the image were complex
-    enough to require antialiasing to be applied to every pixel this would slow
+    applied the performance gain decreases, and in fact if the image were complex
+    enough to require anti-aliasing to be applied to every pixel this would slow
     it down.  However the potential time savings per pixel are much greater than
-    the potential slowdowns (at least with high levels of antialiasing) so even
+    the potential slowdowns (at least with high levels of anti-aliasing) so even
     with very busy images the few pixels that can be ignored should more than
     makeup for any performance losses.
 
-  \subsection{Transformations}
+  \section{Transformations}
     There were only two transformations implemented, translation and rotation.
-    Shearing and scaling can be easily implemented ontop of the transformation
+    Shearing and scaling can be easily implemented on top of the transformation
     framework given and should take less than 40 lines of code each.
 
-    \subsubsection{Translation}
+    \subsection{Translation}
       Instead of using the matrix form for translation it was decided that it
       was easier just using a vector by which to translate the shape.  When any
       of the shapes methods are called with a point that point has the
       translation vector added on to it.  When any of the shapes methods return
       a point the translation vector is taken off it.
 
-    \subsubsection{Rotation}
+    \subsection{Rotation}
       The first implementation of rotation was attempted with matrix
       multiplication.  This however failed, as far as could be seen the code
       matched the correct maths but it still refused to work.  Instead rotation
@@ -66,7 +66,7 @@
       $\mathbf{z}$ vector in the standard cylindrical polar co-ordinate system,
       and is named $\mathbf{v}$.
       Next a random vector is generated and checked to ensure it is not parallel
-      to the given axis.  This is then orthognalised to the given axis and
+      to the given axis.  This is then orthogonalised to the given axis and
       converted to a unit vector to use as one axis.  Finally the cross-product
       of these two axes is found and is used as the third axis.
 
@@ -91,14 +91,14 @@
       And finally back to $\left(x,\,y,\,z\right)$:
       \[ \mathbf{p}' = u \mathbf{u} + w \mathbf{w} + v \mathbf{v} \]
 
-    \subsection{Constructive Solid Geometry (CSG)}
-      To assist with creating CSG objects the intersection methods of the
-      shapes were changed to return a tuple with values of where the ray enters
-      the object and where it exits the object.  This allows very simple
-      calculations of intersections, the entry is the maximum entry point and
-      the exit is the minimum exit point.  If the entry point is after the exit
-      point then the ray doesn't intersect the object.  The problem with this
-      system is that when unions and subtraction were attempted to be
-      implemented they couldn't work with the data structure.
+  \section{Constructive Solid Geometry (CSG)}
+    To assist with creating CSG objects the intersection methods of the
+    shapes were changed to return a tuple with values of where the ray enters
+    the object and where it exits the object.  This allows very simple
+    calculations of intersections, the entry is the maximum entry point and
+    the exit is the minimum exit point.  If the entry point is after the exit
+    point then the ray doesn't intersect the object.  The problem with this
+    system is that when unions and subtraction were attempted to be
+    implemented they couldn't work with the data structure.
 
 

@@ -3,7 +3,7 @@
 # This should work as long as you have all the .tex, .sty and .bib files in
 # the same folder.
 MAINFILE = report
-EXTRA_FILES := $(shell echo "../python/*.py") 
+EXTRA_FILES := $(shell echo "images/*") 
 
 ## Inner workings
 OBJECTS = $(shell echo *.tex)
